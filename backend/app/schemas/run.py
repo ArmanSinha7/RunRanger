@@ -51,3 +51,30 @@ class WeekStats(BaseModel):
     active_sec: int
 
 
+class Stats(BaseModel):
+    total_runs: int
+    total_distance_km: float
+    total_active_sec: int
+    challenges_completed: int
+    longest_run_km: float
+    current_streak_days: int
+    favorite_activity: str | None
+    difficulty_progression: list[str]
+    this_week: WeekStats
+    personal_bests: dict[str, float]
+    badges: list[Badge]
+
+
+class ReflectionRequest(BaseModel):
+    mission_title: str
+    activity: str
+    planned_minutes: int
+    duration_sec: int
+    distance_km: float
+    checkpoints_total: int
+    checkpoints_done: int
+    completed_challenges: list[str] = []
+    feeling: Feeling
+    note: str = Field("", max_length=500)
+    finished_early: bool = False
+
