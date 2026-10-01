@@ -60,3 +60,24 @@ class MissionRequest(BaseModel):
     prefer_demo: bool = False
 
 
+class Checkpoint(BaseModel):
+    title: str = Field(min_length=2, max_length=60)
+    instruction: str = Field(min_length=8, max_length=220)
+    type: CheckpointType
+    at_minute: int = Field(ge=0, le=180)
+
+
+class Mission(BaseModel):
+    """What Gemma must produce. Validated before anything reaches the UI."""
+
+    title: str = Field(min_length=3, max_length=60)
+    summary: str = Field(min_length=10, max_length=240)
+    warmup: str = Field(min_length=5, max_length=140)
+    estimated_distance_km: float = Field(gt=0, le=60)
+    difficulty: Difficulty
+    route_style: RouteStyle
+    pre_run_tip: str = Field(min_length=5, max_length=200)
+    checkpoints: list[Checkpoint] = Field(min_length=2, max_length=8)
+    cooldown: str = Field(min_length=5, max_length=140)
+    screen_off_message: str = Field(min_length=5, max_length=140)
+
