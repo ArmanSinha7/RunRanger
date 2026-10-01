@@ -49,3 +49,14 @@ class RouteStyle(str, Enum):
     out_and_back = "out_and_back"
     wander = "wander"
 
+
+class MissionRequest(BaseModel):
+    activity: Activity = Activity.running
+    duration_min: int = Field(30, ge=5, le=180)
+    difficulty: Difficulty = Difficulty.moderate
+    goal: Goal = Goal.exploration
+    environment: Environment = Environment.anywhere
+    mood: str = Field("", max_length=200)
+    prefer_demo: bool = False
+
+
