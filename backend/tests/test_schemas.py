@@ -37,3 +37,28 @@ def test_checkpoint_sort_validator():
     # Ensure checkpoints are automatically sorted by at_minute
     assert [c.at_minute for c in mission.checkpoints] == [5, 15, 25]
 
+
+def test_mission_validation_rejects_empty():
+    with pytest.raises(ValidationError):
+        Mission(
+            title="",
+            summary="short",
+            warmup="",
+            estimated_distance_km=-1,
+            difficulty=Difficulty.easy,
+            route_style=RouteStyle.loop,
+            pre_run_tip="",
+            checkpoints=[],
+            cooldown="",
+            screen_off_message="",
+        )
+
+
+def test_mission_request_defaults():
+    req = MissionRequest()
+    assert req.activity == Activity.running
+    assert req.duration_min == 30
+    assert req.difficulty == Difficulty.moderate
+    assert req.goal == Goal.exploration
+    assert req.environment == Environment.anywhere
+    assert req.prefer_demo is False
