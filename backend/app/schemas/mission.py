@@ -35,3 +35,17 @@ class Environment(str, Enum):
     anywhere = "anywhere"
 
 
+class CheckpointType(str, Enum):
+    observation = "observation"
+    fitness = "fitness"
+    nature = "nature"
+    mindfulness = "mindfulness"
+    social = "social"
+    exploration = "exploration"
+
+
+class RouteStyle(str, Enum):
+    loop = "loop"
+    out_and_back = "out_and_back"
+    wander = "wander"
+
