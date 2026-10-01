@@ -25,3 +25,15 @@ class RunCreate(BaseModel):
     mode: Literal["ai", "demo"]
     mission: dict
 
+
+class Run(RunCreate):
+    id: int
+    created_at: str
+
+
+class RunUpdate(BaseModel):
+    feeling: Feeling | None = None
+    note: str | None = Field(None, max_length=500)
+    reflection: str | None = Field(None, max_length=1000)
+
+
