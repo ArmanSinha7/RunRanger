@@ -78,3 +78,9 @@ class ReflectionRequest(BaseModel):
     note: str = Field("", max_length=500)
     finished_early: bool = False
 
+
+class ReflectionResponse(BaseModel):
+    mode: Literal["ai", "demo"]
+    model: str | None = None
+    reflection: str
+    next_run: str
