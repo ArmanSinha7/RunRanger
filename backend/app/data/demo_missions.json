@@ -45,3 +45,49 @@
       "warmup": "6 minutes of easy jogging plus 4 short strides",
       "route_style": "out_and_back",
       "pre_run_tip": "Hard sections should feel like 7 out of 10, not an all-out sprint.",
+      "checkpoints": [
+        {"title": "Effort One", "instruction": "Run strong for 45 seconds, then jog easy until your breathing settles.", "type": "fitness", "at": 0.25},
+        {"title": "Effort Two", "instruction": "Another 60 seconds at a strong pace. Stay tall and keep your arms relaxed.", "type": "fitness", "at": 0.45},
+        {"title": "Turnaround Wave", "instruction": "At the turnaround, give a nod or a wave to the next runner or walker you see.", "type": "social", "at": 0.55},
+        {"title": "Final Push", "instruction": "Pick a landmark and finish your last 90 seconds faster than you started.", "type": "fitness", "at": 0.8}
+      ],
+      "cooldown": "5 minutes of walking, then calf and hamstring stretches",
+      "screen_off_message": "The plan is in your head now. Lock the phone and go earn it."
+    },
+    {
+      "id": "clear-head",
+      "goals": ["stress_relief", "random"],
+      "activities": ["walking", "running", "jogging"],
+      "title": "Clear Head Loop",
+      "summary": "A calm loop designed to leave your thoughts somewhere behind you on the path.",
+      "warmup": "4 minutes of easy movement, breathing in for 4 steps and out for 4",
+      "route_style": "loop",
+      "pre_run_tip": "No pace goals today. Comfortable is perfect.",
+      "checkpoints": [
+        {"title": "Footstep Focus", "instruction": "For two minutes, focus only on the rhythm of your feet.", "type": "mindfulness", "at": 0.3},
+        {"title": "Small Kindness", "instruction": "Smile at the next person you pass. That's it.", "type": "social", "at": 0.55},
+        {"title": "Notice Three", "instruction": "Name three things you can see, two you can hear, one you can smell.", "type": "observation", "at": 0.8}
+      ],
+      "cooldown": "4 minutes of slow walking and one big stretch",
+      "screen_off_message": "Your head will be clearer in a few minutes. Lock the phone and go."
+    },
+    {
+      "id": "neighbourhood-safari",
+      "goals": ["exploration", "adventure", "nature"],
+      "activities": ["walking", "jogging", "running"],
+      "title": "Neighbourhood Safari",
+      "summary": "A wandering route that treats your own streets like somewhere you've just arrived.",
+      "warmup": "5 minutes of brisk walking",
+      "route_style": "wander",
+      "pre_run_tip": "Stick to footpaths and public parks; cross only at proper crossings.",
+      "checkpoints": [
+        {"title": "Bird Spotter", "instruction": "Find a bird and watch it for ten seconds. What is it doing?", "type": "nature", "at": 0.2},
+        {"title": "New Street", "instruction": "Turn onto a safe public street or path you have never walked before.", "type": "exploration", "at": 0.45},
+        {"title": "Oldest Thing", "instruction": "Spot the oldest-looking building, tree or wall on your route.", "type": "observation", "at": 0.7},
+        {"title": "Strong Finish", "instruction": "Pick up the pace for the last stretch home, about one minute.", "type": "fitness", "at": 0.85}
+      ],
+      "cooldown": "5 minutes of easy walking",
+      "screen_off_message": "Your neighbourhood has stories. Lock the phone and go read them."
+    }
+  ]
+}
