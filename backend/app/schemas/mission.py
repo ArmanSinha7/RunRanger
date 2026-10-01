@@ -81,3 +81,12 @@ class Mission(BaseModel):
     cooldown: str = Field(min_length=5, max_length=140)
     screen_off_message: str = Field(min_length=5, max_length=140)
 
+    @field_validator("checkpoints")
+    @classmethod
+    def sort_checkpoints(cls, v: list[Checkpoint]) -> list[Checkpoint]:
+        return sorted(v, key=lambda c: c.at_minute)
+
+
+MissionMode = Literal["ai", "demo"]
+
+
