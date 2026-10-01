@@ -1,0 +1,47 @@
+{
+  "_about": "Hand-written sample missions used in Demo Mode (no AI). Checkpoint timing is stored as a fraction of the outing and scaled to the chosen duration. These are labelled 'Demo Mode — local sample missions' in the UI and are never presented as AI output.",
+  "missions": [
+    {
+      "id": "campus-explorer",
+      "goals": ["exploration", "random"],
+      "activities": ["running", "jogging"],
+      "title": "The Campus Explorer",
+      "summary": "An easy-going loop that turns a familiar route into a scavenger hunt for details you usually run past.",
+      "warmup": "5 minutes of easy jogging, shoulders loose",
+      "route_style": "loop",
+      "pre_run_tip": "Leave the earphones in your pocket for the first checkpoint. You'll notice more.",
+      "checkpoints": [
+        {"title": "First Discovery", "instruction": "Spot something on this route you have genuinely never noticed before: a sign, a door, a tree.", "type": "observation", "at": 0.2},
+        {"title": "Speed Burst", "instruction": "Pick a landmark ahead and run a little faster until you reach it, about 60 seconds.", "type": "fitness", "at": 0.4},
+        {"title": "Different Path", "instruction": "At the next safe junction, take the public path you normally skip for about 300 metres.", "type": "exploration", "at": 0.6},
+        {"title": "Sound Map", "instruction": "Slow down for one minute and count how many different sounds you can hear.", "type": "mindfulness", "at": 0.8}
+      ],
+      "cooldown": "5 minutes of walking and slow breathing",
+      "screen_off_message": "Your mission is ready. Lock your phone and go find something new."
+    },
+    {
+      "id": "leaf-hunter",
+      "goals": ["nature", "stress_relief"],
+      "activities": ["walking", "jogging"],
+      "title": "Leaf Hunter",
+      "summary": "A gentle nature walk built around looking closely at the green things around you.",
+      "warmup": "3 minutes of slow walking, rolling the shoulders",
+      "route_style": "wander",
+      "pre_run_tip": "Walk at a pace where you could hum a song comfortably.",
+      "checkpoints": [
+        {"title": "Three Leaves", "instruction": "Find three trees or plants with noticeably different leaf shapes.", "type": "nature", "at": 0.25},
+        {"title": "Sky Check", "instruction": "Stop somewhere safe, look up for 30 seconds and notice the clouds or the light.", "type": "mindfulness", "at": 0.5},
+        {"title": "Colour Count", "instruction": "Spot five different natural colours: bark, flowers, soil, moss, sky.", "type": "observation", "at": 0.75}
+      ],
+      "cooldown": "3 minutes of easy walking and a long stretch",
+      "screen_off_message": "Nothing on this screen is greener than what's outside. Lock it and go."
+    },
+    {
+      "id": "interval-quest",
+      "goals": ["fitness", "adventure"],
+      "activities": ["running", "jogging"],
+      "title": "Interval Quest",
+      "summary": "A focused out-and-back with short efforts that leave you proud, not wrecked.",
+      "warmup": "6 minutes of easy jogging plus 4 short strides",
+      "route_style": "out_and_back",
+      "pre_run_tip": "Hard sections should feel like 7 out of 10, not an all-out sprint.",
