@@ -40,3 +40,19 @@ class Database:
         with self.connect() as conn:
             conn.executescript(SCHEMA)
 
+    @contextmanager
+    def connect(self) -> Iterator[sqlite3.Connection]:
+        if str(self.path) == ":memory:":
+            if self._memory_conn is None:
+                self._memory_conn = sqlite3.connect(":memory:", check_same_thread=False)
+                self._memory_conn.row_factory = sqlite3.Row
+            yield self._memory_conn
+            self._memory_conn.commit()
+            return
+        conn = sqlite3.connect(self.path)
+        conn.row_factory = sqlite3.Row
+        try:
+            yield conn
+            conn.commit()
+        finally:
+            conn.close()
