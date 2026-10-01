@@ -69,3 +69,35 @@ class RunRepository:
         with self.db.connect() as c:
             return c.execute("DELETE FROM runs").rowcount
 
+    def history_summary(self, n: int = 5) -> str:
+        runs = self.list(n)
+        if not runs:
+            return "none yet"
+        parts = []
+        for r in runs:
+            parts.append(
+                f"{r.activity} {round(r.duration_sec / 60)} min, {r.distance_km:.1f} km, {r.difficulty}, "
+                f"{r.checkpoints_done}/{r.checkpoints_total} checkpoints, felt {r.feeling or 'unrated'}"
+                + (", stopped early" if r.finished_early else "")
+            )
+        return "; ".join(parts)
+
+    # ---------- export ----------
+    def export_json(self) -> str:
+        return json.dumps([r.model_dump() for r in self.list(100000)], indent=2)
+
+    def export_csv(self) -> str:
+        buf = io.StringIO()
+        w = csv.writer(buf)
+        w.writerow(COLUMNS)
+        for r in self.list(100000):
+            d = r.model_dump()
+            w.writerow([d[k] for k in COLUMNS])
+        return buf.getvalue()
+
+    # ---------- progression ----------
+    def stats(self, today: date | None = None) -> Stats:
+        today = today or date.today()
+        runs = self.list(100000)
+        days = sorted({datetime.fromisoformat(r.created_at).date() for r in runs})
+
