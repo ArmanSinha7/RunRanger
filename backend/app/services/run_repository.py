@@ -43,3 +43,29 @@ class RunRepository:
             new_id = cur.lastrowid
         return self.get(new_id)  # type: ignore[return-value]
 
+    def get(self, run_id: int) -> Run | None:
+        with self.db.connect() as c:
+            row = c.execute("SELECT * FROM runs WHERE id = ?", (run_id,)).fetchone()
+        return _row_to_run(row) if row else None
+
+    def list(self, limit: int = 50) -> list[Run]:
+        with self.db.connect() as c:
+            rows = c.execute("SELECT * FROM runs ORDER BY created_at DESC, id DESC LIMIT ?", (limit,)).fetchall()
+        return [_row_to_run(r) for r in rows]
+
+    def update(self, run_id: int, patch: RunUpdate) -> Run | None:
+        fields = patch.model_dump(exclude_none=True)
+        if fields:
+            sets = ", ".join(f"{k} = ?" for k in fields)
+            with self.db.connect() as c:
+                c.execute(f"UPDATE runs SET {sets} WHERE id = ?", (*fields.values(), run_id))
+        return self.get(run_id)
+
+    def delete(self, run_id: int) -> bool:
+        with self.db.connect() as c:
+            return c.execute("DELETE FROM runs WHERE id = ?", (run_id,)).rowcount > 0
+
+    def delete_all(self) -> int:
+        with self.db.connect() as c:
+            return c.execute("DELETE FROM runs").rowcount
+
