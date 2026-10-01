@@ -26,3 +26,12 @@ class Goal(str, Enum):
     adventure = "adventure"
     random = "random"
 
+
+class Environment(str, Enum):
+    campus = "campus"
+    park = "park"
+    neighborhood = "neighborhood"
+    trail = "trail"
+    anywhere = "anywhere"
+
+
