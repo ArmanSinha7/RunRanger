@@ -101,3 +101,31 @@ class RunRepository:
         runs = self.list(100000)
         days = sorted({datetime.fromisoformat(r.created_at).date() for r in runs})
 
+        current = 0
+        if days:
+            cursor = today if today in days else today - timedelta(days=1)
+            day_set = set(days)
+            while cursor in day_set:
+                current += 1
+                cursor -= timedelta(days=1)
+
+        longest_streak, run_len = 0, 0
+        for i, d in enumerate(days):
+            run_len = run_len + 1 if i and (d - days[i - 1]).days == 1 else 1
+            longest_streak = max(longest_streak, run_len)
+
+        week_start = today - timedelta(days=6)
+        week = [r for r in runs if datetime.fromisoformat(r.created_at).date() >= week_start]
+        challenges = sum(r.checkpoints_done for r in runs)
+        total_km = sum(r.distance_km for r in runs)
+        longest = max((r.distance_km for r in runs), default=0.0)
+        fav = Counter(r.activity for r in runs).most_common(1)
+        paced = [r.duration_sec / 60 / r.distance_km for r in runs if r.distance_km >= 1 and r.duration_sec > 0]
+
+        bests: dict[str, float] = {}
+        if runs:
+            bests["longest_distance_km"] = round(longest, 2)
+            bests["longest_duration_min"] = round(max(r.duration_sec for r in runs) / 60, 1)
+        if paced:
+            bests["fastest_pace_min_per_km"] = round(min(paced), 2)
+
