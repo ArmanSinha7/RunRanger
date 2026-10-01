@@ -37,3 +37,17 @@ class RunUpdate(BaseModel):
     reflection: str | None = Field(None, max_length=1000)
 
 
+class Badge(BaseModel):
+    id: str
+    emoji: str
+    name: str
+    description: str
+    earned: bool
+
+
+class WeekStats(BaseModel):
+    runs: int
+    distance_km: float
+    active_sec: int
+
+
