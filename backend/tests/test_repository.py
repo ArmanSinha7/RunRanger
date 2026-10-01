@@ -44,3 +44,28 @@ def test_repository_crud_and_stats(repo: RunRepository):
     assert r1.id is not None
     assert r1.mission_title == "Morning Grass Run"
 
+    # Verify stats updated & badges unlocked
+    st1 = repo.stats()
+    assert st1.total_runs == 1
+    assert st1.total_distance_km == 5.2
+    assert st1.longest_run_km == 5.2
+    # "first_run" and "5k_explorer" should be earned!
+    earned_ids = {b.id for b in st1.badges if b.earned}
+    assert "first_run" in earned_ids
+    assert "five_k" in earned_ids
+
+    # Update run
+    up = repo.update(r1.id, RunUpdate(note="Updated run note"))
+    assert up is not None
+    assert up.note == "Updated run note"
+
+    # Export test
+    json_exp = repo.export_json()
+    assert "Morning Grass Run" in json_exp
+    csv_exp = repo.export_csv()
+    assert "Morning Grass Run" in csv_exp
+
+    # Delete single run
+    assert repo.delete(r1.id) is True
+    assert repo.delete(9999) is False
+    assert len(repo.list()) == 0
