@@ -12,3 +12,17 @@ class Activity(str, Enum):
     jogging = "jogging"
 
 
+class Difficulty(str, Enum):
+    easy = "easy"
+    moderate = "moderate"
+    challenging = "challenging"
+
+
+class Goal(str, Enum):
+    fitness = "fitness"
+    exploration = "exploration"
+    nature = "nature"
+    stress_relief = "stress_relief"
+    adventure = "adventure"
+    random = "random"
+
