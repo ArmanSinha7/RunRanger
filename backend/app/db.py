@@ -30,3 +30,13 @@ CREATE TABLE IF NOT EXISTS runs (
 """
 # Note: no GPS track and no coordinates are stored. Only the distance number.
 
+
+class Database:
+    def __init__(self, path: Path):
+        self.path = Path(path)
+        if str(self.path) != ":memory:":
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+        self._memory_conn: sqlite3.Connection | None = None
+        with self.connect() as conn:
+            conn.executescript(SCHEMA)
+
