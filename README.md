@@ -38,3 +38,22 @@ Modern fitness apps demand continuous attention: complex dashboards, leaderboard
 
 This project strictly requires **zero paid services** to develop, run, or self-host. There are **no API keys** required anywhere in the codebase.
 
+| Component | Technology | Cost | Cloud Dependency |
+|---|---|---|---|
+| **AI Inference** | [Ollama](https://ollama.com) + [Gemma 3 4B](https://ollama.com/library/gemma3) | **₹0** | None (Runs locally on host hardware) |
+| **Backend API** | [FastAPI](https://fastapi.tiangolo.com) (Python 3.10+) | **₹0** | None (Runs locally on port 8000) |
+| **Database** | SQLite 3 (Python stdlib) | **₹0** | None (Local file `./data/runranger.db`) |
+| **Frontend** | React 19 + TypeScript + Vite + Tailwind v4 | **₹0** | None (Static build served locally) |
+| **Map Rendering** | [Leaflet](https://leafletjs.com) + [OpenStreetMap](https://www.openstreetmap.org) | **₹0** | Community tiles (visible attribution included) |
+| **Routing** | Local Geometric Loop / OSRM | **₹0** | Offline trigonometric algorithm / demo OSRM |
+| **Authentication** | None (Local-first) | **₹0** | No accounts or cloud auth needed |
+
+### What is Actually Free vs. What Has External Usage Limits?
+- **Unlimited Local Features**: Local Gemma 3 inference, SQLite storage, local geometric route calculation, and the React application run 100% locally with zero request caps or charges.
+- **Third-Party Open Infrastructure**:
+  - **OpenStreetMap Tiles**: Provided by community donation. RunRanger adheres to the [OSM Tile Usage Policy](https://operations.osmfoundation.org/policies/tiles/): tiles are rendered only when viewing the map; no bulk tile downloads, scraping, or caching.
+  - **OSRM Public Routing Server**: RunRanger isolates routing behind an abstraction layer (`LocalRouteProvider`). If the public OSRM demonstration server is unreachable or rate-limited, RunRanger automatically falls back to the internal geometric loop with zero network requests.
+  - **No Nominatim Geocoding Abuse**: RunRanger avoids automatic geocoding queries against Nominatim to protect public servers.
+
+---
+
