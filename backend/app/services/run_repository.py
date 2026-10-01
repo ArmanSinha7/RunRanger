@@ -129,3 +129,28 @@ class RunRepository:
         if paced:
             bests["fastest_pace_min_per_km"] = round(min(paced), 2)
 
+        environments = {r.environment for r in runs}
+        badges = [
+            Badge(id="first_run", emoji="🌱", name="First Run", description="Complete your first mission.", earned=len(runs) >= 1),
+            Badge(id="five_k", emoji="🏃", name="5K Explorer", description="Cover 5 km in a single outing.", earned=longest >= 5),
+            Badge(id="full_mission", emoji="🎯", name="Mission Complete", description="Finish every checkpoint in a mission.",
+                  earned=any(r.checkpoints_total and r.checkpoints_done >= r.checkpoints_total for r in runs)),
+            Badge(id="touch_grass", emoji="🌳", name="Touch Grass Champion", description="Complete 25 outdoor challenges.", earned=challenges >= 25),
+            Badge(id="streak_7", emoji="🔥", name="7-Day Streak", description="Get outside 7 days in a row.", earned=longest_streak >= 7),
+            Badge(id="route_explorer", emoji="🗺️", name="Route Explorer", description="Run in 3 different kinds of places.", earned=len(environments) >= 3),
+        ]
+
+        return Stats(
+            total_runs=len(runs),
+            total_distance_km=round(total_km, 2),
+            total_active_sec=sum(r.duration_sec for r in runs),
+            challenges_completed=challenges,
+            longest_run_km=round(longest, 2),
+            current_streak_days=current,
+            favorite_activity=fav[0][0] if fav else None,
+            difficulty_progression=[r.difficulty for r in reversed(runs[:10])],
+            this_week=WeekStats(runs=len(week), distance_km=round(sum(r.distance_km for r in week), 2),
+                                active_sec=sum(r.duration_sec for r in week)),
+            personal_bests=bests,
+            badges=badges,
+        )
