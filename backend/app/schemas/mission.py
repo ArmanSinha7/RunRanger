@@ -90,3 +90,16 @@ class Mission(BaseModel):
 MissionMode = Literal["ai", "demo"]
 
 
+class MissionResponse(BaseModel):
+    mode: MissionMode
+    model: str | None = None
+    mission: Mission
+    request: MissionRequest
+    notice: str | None = None  # e.g. why we fell back to demo mode
+    generation_ms: int | None = None
+    attempts: int = 1
+
+
+def mission_json_schema() -> dict:
+    """JSON Schema handed to Ollama's `format` so decoding is constrained."""
+    return Mission.model_json_schema()
