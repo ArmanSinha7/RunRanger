@@ -76,3 +76,15 @@ def point_along(pts: list[LatLng], fraction: float) -> LatLng:
         acc += seg
     return pts[-1]
 
+
+def _rng(seed: str) -> random.Random:
+    return random.Random(int(hashlib.sha256(seed.encode()).hexdigest()[:12], 16))
+
+
+class LocalRouteProvider:
+    """Generates an orthogonal grid-aligned route for offline use without crossing buildings diagonally."""
+
+    async def route(self, start: LatLng, distance_km: float, style: str, seed: str) -> Route:
+        rng = _rng(seed)
+        heading = rng.choice([0.0, math.pi / 2, math.pi, 3 * math.pi / 2])
+
