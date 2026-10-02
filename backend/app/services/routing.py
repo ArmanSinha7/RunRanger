@@ -178,3 +178,20 @@ class OsrmRouteProvider:
         except Exception:
             return None
 
+    async def route(self, start: LatLng, distance_km: float, style: str, seed: str) -> Route:
+        rng = _rng(seed)
+
+        # 1. Snap start coordinate to nearest walkable road
+        snapped_start = start
+        try:
+            nearest_url = f"{self.base_url}/nearest/v1/foot/{start[1]:.6f},{start[0]:.6f}"
+            async with httpx.AsyncClient(timeout=4.0, transport=self._transport) as c:
+                nr = await c.get(nearest_url)
+                if nr.status_code == 200:
+                    ndata = nr.json()
+                    if ndata.get("code") == "Ok" and ndata.get("waypoints"):
+                        loc = ndata["waypoints"][0]["location"]
+                        snapped_start = (loc[1], loc[0])
+        except Exception:
+            snapped_start = start
+
