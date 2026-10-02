@@ -19,3 +19,18 @@ Rules:
 - No emojis in titles. Output JSON only."""
 
 
+def checkpoint_count(duration_min: int) -> tuple[int, int]:
+    if duration_min <= 15:
+        return 2, 3
+    if duration_min <= 30:
+        return 3, 4
+    if duration_min <= 45:
+        return 4, 5
+    return 5, 6
+
+
+def mission_user_prompt(req: MissionRequest, expected_km: float, history: str) -> str:
+    lo, hi = checkpoint_count(req.duration_min)
+    mood = req.mood.strip() or "(not given)"
+    return f"""Design a mission.
+
