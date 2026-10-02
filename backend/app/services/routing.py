@@ -203,3 +203,22 @@ class OsrmRouteProvider:
             (base_h + 3.14) % (2 * math.pi),
         ]
 
+        candidate_wps: list[list[LatLng]] = []
+        for heading in candidate_headings:
+            if style == "out_and_back":
+                out_dist = max(0.2, (distance_km / 2.0) / 1.35)
+                turnaround = offset(snapped_start, out_dist, heading)
+                candidate_wps.append([snapped_start, turnaround, snapped_start])
+            elif style == "wander":
+                r = max(0.15, distance_km / 7.5)
+                p1 = offset(snapped_start, r, heading)
+                p2 = offset(p1, r * 1.1, heading + 1.8)
+                p3 = offset(p2, r * 0.9, heading + 3.4)
+                candidate_wps.append([snapped_start, p1, p2, p3, snapped_start])
+            else:
+                # Standard Loop: 3-point closed triangle around start
+                r = max(0.12, distance_km / 8.5)
+                p1 = offset(snapped_start, r, heading)
+                p2 = offset(snapped_start, r, heading + 2.094)
+                candidate_wps.append([snapped_start, p1, p2, snapped_start])
+
