@@ -126,3 +126,13 @@ class LocalRouteProvider:
 class OsrmRouteProvider:
     """Snaps running missions to real streets, footpaths, and designated pedestrian paths."""
 
+    def __init__(
+        self,
+        base_url: str,
+        fallback: LocalRouteProvider,
+        transport: httpx.AsyncBaseTransport | None = None,
+    ):
+        self.base_url = base_url.rstrip("/")
+        self.fallback = fallback
+        self._transport = transport
+
