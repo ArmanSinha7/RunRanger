@@ -52,3 +52,27 @@ def haversine_km(a: LatLng, b: LatLng) -> float:
     h = math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2
     return 2 * EARTH_R_KM * math.asin(math.sqrt(h))
 
+
+def path_length_km(pts: list[LatLng]) -> float:
+    return sum(haversine_km(pts[i], pts[i + 1]) for i in range(len(pts) - 1))
+
+
+def point_along(pts: list[LatLng], fraction: float) -> LatLng:
+    if not pts:
+        return (0.0, 0.0)
+    if len(pts) == 1:
+        return pts[0]
+    total = path_length_km(pts)
+    target = max(0.0, min(1.0, fraction)) * total
+    acc = 0.0
+    for i in range(len(pts) - 1):
+        seg = haversine_km(pts[i], pts[i + 1])
+        if acc + seg >= target and seg > 0:
+            t = (target - acc) / seg
+            return (
+                pts[i][0] + (pts[i + 1][0] - pts[i][0]) * t,
+                pts[i][1] + (pts[i + 1][1] - pts[i][1]) * t,
+            )
+        acc += seg
+    return pts[-1]
+
