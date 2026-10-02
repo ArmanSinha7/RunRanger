@@ -70,3 +70,37 @@ class MissionService:
                 notice=f"Model {status.model} isn't installed yet. Run `ollama pull {status.model}`.",
             )
 
+        messages = [
+            {"role": "system", "content": MISSION_SYSTEM},
+            {"role": "user", "content": mission_user_prompt(req, expected_distance_km(req), history)},
+        ]
+        schema = mission_json_schema()
+        started = time.perf_counter()
+        last_errors: list[str] = []
+        for attempt in range(1, MAX_ATTEMPTS + 1):
+            try:
+                raw = await self.llm.chat_json(messages, schema, temperature=0.8 if attempt == 1 else 0.4)
+            except ModelNotInstalled:
+                return MissionResponse(mode="demo", mission=demo_mission(req), request=req,
+                                       notice=f"Model {self.llm.model} isn't installed. Run `ollama pull {self.llm.model}`.")
+            except OllamaUnavailable:
+                return MissionResponse(mode="demo", mission=demo_mission(req), request=req,
+                                       notice="Lost connection to Ollama, so this is a sample mission.")
+            try:
+                mission = parse_mission(raw, req)
+                return MissionResponse(
+                    mode="ai", model=self.llm.model, mission=mission, request=req,
+                    generation_ms=int((time.perf_counter() - started) * 1000), attempts=attempt,
+                )
+            except MissionRejected as e:
+                last_errors = e.errors
+                messages += [
+                    {"role": "assistant", "content": raw},
+                    {"role": "user", "content": correction_prompt(e.errors)},
+                ]
+
+        return MissionResponse(
+            mode="demo", mission=demo_mission(req), request=req, attempts=MAX_ATTEMPTS,
+            notice="Gemma's mission didn't pass our safety and format checks after 3 tries, so here's a sample mission instead."
+                   + (f" (last issue: {last_errors[0]})" if last_errors else ""),
+        )
