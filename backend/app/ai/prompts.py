@@ -34,3 +34,25 @@ def mission_user_prompt(req: MissionRequest, expected_km: float, history: str) -
     mood = req.mood.strip() or "(not given)"
     return f"""Design a mission.
 
+Activity: {req.activity.value}
+Total duration: {req.duration_min} minutes (including warm-up and cooldown)
+Difficulty: {req.difficulty.value}
+Goal: {req.goal.value.replace('_', ' ')}
+Environment: {req.environment.value}
+How they feel today: {mood}
+Realistic distance for this outing: about {expected_km:.1f} km (use this for estimated_distance_km)
+Recent outings (most recent first): {history}
+
+Return between {lo} and {hi} checkpoints with at_minute values between 3 and {max(4, req.duration_min - 3)}.
+Pick route_style: "loop" for most runs, "out_and_back" for focused fitness, "wander" for exploration or nature.
+The difficulty field must be "{req.difficulty.value}"."""
+
+
+def correction_prompt(errors: list[str]) -> str:
+    joined = "\n".join(f"- {e}" for e in errors[:8])
+    return (
+        "Your previous JSON was rejected by the validator:\n"
+        f"{joined}\n"
+        "Return the full corrected mission as JSON only, fixing every problem and keeping it safe."
+    )
+
