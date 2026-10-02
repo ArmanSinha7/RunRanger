@@ -74,3 +74,17 @@ class OllamaClient:
         except (ValueError, KeyError) as e:
             raise OllamaUnavailable("Unexpected response from Ollama") from e
 
+    async def chat_json(self, messages: list[dict[str, str]], schema: dict[str, Any], temperature: float = 0.7) -> str:
+        return await self.chat_raw(messages, schema=schema, temperature=temperature)
+
+
+def loads_lenient(raw: str) -> Any:
+    """json.loads that also tolerates ```json fences, in case a model adds them."""
+    s = raw.strip()
+    if s.startswith("```"):
+        s = s.strip("`")
+        s = s[s.find("{"):] if "{" in s else s
+    end = s.rfind("}")
+    if end != -1:
+        s = s[: end + 1]
+    return json.loads(s)
