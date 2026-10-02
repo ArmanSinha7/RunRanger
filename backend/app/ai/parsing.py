@@ -39,3 +39,33 @@ UNSAFE_PATTERNS = [
 ]
 _UNSAFE_RE = [re.compile(p, re.IGNORECASE) for p in UNSAFE_PATTERNS]
 
+
+class MissionRejected(Exception):
+    def __init__(self, errors: list[str]):
+        super().__init__("; ".join(errors))
+        self.errors = errors
+
+
+def expected_distance_km(req: MissionRequest) -> float:
+    # Warm-up and cooldown are slower: count ~80% of the time at target pace.
+    moving_h = (req.duration_min * 0.8) / 60.0
+    return round(PACE_KMH[req.activity] * DIFFICULTY_FACTOR[req.difficulty] * moving_h, 1)
+
+
+def find_unsafe(text: str) -> str | None:
+    for rx in _UNSAFE_RE:
+        m = rx.search(text)
+        if m:
+            return m.group(0)
+    return None
+
+
+def parse_mission(raw: str, req: MissionRequest) -> Mission:
+    """Decode, validate and sanitise. Raises MissionRejected with fixable errors."""
+    try:
+        data = loads_lenient(raw)
+    except (json.JSONDecodeError, ValueError):
+        raise MissionRejected(["Output was not valid JSON."])
+    if not isinstance(data, dict):
+        raise MissionRejected(["Top level must be a JSON object."])
+
