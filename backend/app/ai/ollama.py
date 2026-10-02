@@ -50,3 +50,27 @@ class OllamaClient:
         installed = any(n == self.model or n == f"{self.model}:latest" for n in names)
         return OllamaStatus(True, self.model, installed, names)
 
+    async def chat_raw(self, messages: list[dict[str, str]], schema: dict[str, Any] | None = None, temperature: float = 0.7) -> str:
+        """Returns the assistant message content (a JSON string when schema is given)."""
+        payload: dict[str, Any] = {
+            "model": self.model,
+            "messages": messages,
+            "stream": False,
+            "options": {"temperature": temperature},
+        }
+        if schema is not None:
+            payload["format"] = schema  # Ollama structured outputs: constrained decoding
+        try:
+            async with self._client(self.timeout_s) as c:
+                r = await c.post("/api/chat", json=payload)
+        except httpx.HTTPError as e:
+            raise OllamaUnavailable(str(e)) from e
+        if r.status_code == 404 and "not found" in r.text.lower():
+            raise ModelNotInstalled(self.model)
+        if r.status_code >= 400:
+            raise OllamaUnavailable(f"HTTP {r.status_code}")
+        try:
+            return r.json()["message"]["content"]
+        except (ValueError, KeyError) as e:
+            raise OllamaUnavailable("Unexpected response from Ollama") from e
+
