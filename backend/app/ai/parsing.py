@@ -93,3 +93,21 @@ def parse_mission(raw: str, req: MissionRequest) -> Mission:
     return apply_guardrails(mission, req)
 
 
+def apply_guardrails(mission: Mission, req: MissionRequest) -> Mission:
+    """Deterministic fixes. The model writes words; arithmetic stays in code."""
+    _, hi = checkpoint_count(req.duration_min)
+    last_minute = max(4, req.duration_min - 3)
+    cps = []
+    for c in mission.checkpoints[:hi]:
+        cps.append(c.model_copy(update={"at_minute": min(max(c.at_minute, 2), last_minute)}))
+
+    expected = expected_distance_km(req)
+    est = mission.estimated_distance_km
+    if not (expected * 0.75 <= est <= expected * 1.25):
+        est = expected
+
+    return mission.model_copy(update={
+        "checkpoints": sorted(cps, key=lambda c: c.at_minute),
+        "estimated_distance_km": round(est, 1),
+        "difficulty": req.difficulty,  # user's choice always wins
+    })
