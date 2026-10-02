@@ -31,3 +31,24 @@ class Route:
     checkpoints: list[LatLng] = field(default_factory=list)
     streets: list[str] = field(default_factory=list)
 
+
+class RouteProvider(Protocol):
+    async def route(self, start: LatLng, distance_km: float, style: str, seed: str) -> Route: ...
+
+
+def offset(p: LatLng, dist_km: float, bearing_rad: float) -> LatLng:
+    lat1, lon1 = math.radians(p[0]), math.radians(p[1])
+    d = dist_km / EARTH_R_KM
+    lat2 = math.asin(math.sin(lat1) * math.cos(d) + math.cos(lat1) * math.sin(d) * math.cos(bearing_rad))
+    lon2 = lon1 + math.atan2(
+        math.sin(bearing_rad) * math.sin(d) * math.cos(lat1),
+        math.cos(d) - math.sin(lat1) * math.sin(lat2),
+    )
+    return (math.degrees(lat2), math.degrees(lon2))
+
+
+def haversine_km(a: LatLng, b: LatLng) -> float:
+    la1, lo1, la2, lo2 = map(math.radians, (a[0], a[1], b[0], b[1]))
+    h = math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2
+    return 2 * EARTH_R_KM * math.asin(math.sqrt(h))
+
