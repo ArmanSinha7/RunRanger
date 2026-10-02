@@ -88,3 +88,29 @@ class LocalRouteProvider:
         rng = _rng(seed)
         heading = rng.choice([0.0, math.pi / 2, math.pi, 3 * math.pi / 2])
 
+        if style == "out_and_back":
+            half = distance_km / 2.0
+            steps = 10
+            step_len = half / steps
+            pts = [start]
+            curr = start
+            for _ in range(steps):
+                curr = offset(curr, step_len, heading)
+                pts.append(curr)
+            # Retrace back
+            geometry = pts + pts[-2::-1]
+        else:
+            # Orthogonal rectangular block loop following standard grid blocks
+            side = max(0.15, distance_km / 4.6)
+            pts = [start]
+            curr = start
+            steps_per_side = 6
+            step_len = side / steps_per_side
+            for d_heading in [heading, heading + math.pi / 2, heading + math.pi, heading + 3 * math.pi / 2]:
+                for _ in range(steps_per_side):
+                    curr = offset(curr, step_len, d_heading)
+                    pts.append(curr)
+            # Ensure exact close back to start
+            pts[-1] = start
+            geometry = pts
+
