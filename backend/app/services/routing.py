@@ -195,3 +195,11 @@ class OsrmRouteProvider:
         except Exception:
             snapped_start = start
 
+        # 2. Formulate 3 diverse directional candidate waypoint sets
+        base_h = rng.uniform(0, 2 * math.pi)
+        candidate_headings = [
+            base_h,
+            (base_h + 1.57) % (2 * math.pi),
+            (base_h + 3.14) % (2 * math.pi),
+        ]
+
