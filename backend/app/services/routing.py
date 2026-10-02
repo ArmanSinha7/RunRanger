@@ -136,3 +136,26 @@ class OsrmRouteProvider:
         self.fallback = fallback
         self._transport = transport
 
+    async def _fetch_candidate(
+        self,
+        client: httpx.AsyncClient,
+        wps: list[LatLng],
+    ) -> Route | None:
+        coords = ";".join(f"{lng:.6f},{lat:.6f}" for lat, lng in wps)
+        url = f"{self.base_url}/route/v1/foot/{coords}"
+        try:
+            r = await client.get(
+                url,
+                params={"overview": "full", "geometries": "geojson", "steps": "true"},
+            )
+            if r.status_code != 200:
+                return None
+            data = r.json()
+            if data.get("code") != "Ok" or not data.get("routes"):
+                return None
+            rt = data["routes"][0]
+            coords_raw = rt.get("geometry", {}).get("coordinates", [])
+            if not coords_raw:
+                return None
+            geometry = [(lat, lng) for lng, lat in coords_raw]
+
