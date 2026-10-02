@@ -39,3 +39,14 @@ class OllamaClient:
     def _client(self, timeout: float) -> httpx.AsyncClient:
         return httpx.AsyncClient(base_url=self.base_url, timeout=timeout, transport=self._transport)
 
+    async def status(self) -> OllamaStatus:
+        try:
+            async with self._client(3.0) as c:
+                r = await c.get("/api/tags")
+                r.raise_for_status()
+                names = [m.get("name", "") for m in r.json().get("models", [])]
+        except (httpx.HTTPError, ValueError):
+            return OllamaStatus(False, self.model, False, [])
+        installed = any(n == self.model or n == f"{self.model}:latest" for n in names)
+        return OllamaStatus(True, self.model, installed, names)
+
