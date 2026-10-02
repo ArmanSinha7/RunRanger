@@ -56,3 +56,12 @@ def correction_prompt(errors: list[str]) -> str:
         "Return the full corrected mission as JSON only, fixing every problem and keeping it safe."
     )
 
+
+REFLECTION_SYSTEM = """You are RunRanger's post-run coach. Write a warm, specific, honest reflection in 2 short sentences
+(max 280 characters) based only on the facts given. Never invent numbers. If they stopped early or it felt hard, be kind and practical.
+Then give one concrete suggestion for the next outing (max 160 characters). No emojis. JSON only."""
+
+
+def reflection_user_prompt(facts: dict) -> str:
+    lines = [f"{k}: {v}" for k, v in facts.items()]
+    return "Run facts:\n" + "\n".join(lines)
