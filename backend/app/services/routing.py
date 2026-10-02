@@ -245,3 +245,8 @@ class OsrmRouteProvider:
         except Exception:
             pass
 
+        # If OSRM fails or times out, fall back safely to local orthogonal grid
+        fallback_route = await self.fallback.route(snapped_start, distance_km, style, seed)
+        fallback_route.notice = "Online road router unavailable; showing local pedestrian estimation."
+        return fallback_route
+
