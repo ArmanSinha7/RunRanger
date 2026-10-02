@@ -250,3 +250,10 @@ class OsrmRouteProvider:
         fallback_route.notice = "Online road router unavailable; showing local pedestrian estimation."
         return fallback_route
 
+
+async def build_route(
+    provider: RouteProvider,
+    start: LatLng,
+    distance_km: float,
+    style: str,
+    seed: str,
