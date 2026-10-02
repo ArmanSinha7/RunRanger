@@ -235,3 +235,13 @@ class OsrmRouteProvider:
                 ]
                 results = await asyncio.gather(*tasks, return_exceptions=True)
 
+            valid_routes: list[Route] = [
+                r for r in results if isinstance(r, Route) and len(r.geometry) >= 5
+            ]
+            if valid_routes:
+                # Pick the route whose real road distance is closest to requested distance
+                best_route = min(valid_routes, key=lambda r: abs(r.distance_km - distance_km))
+                return best_route
+        except Exception:
+            pass
+
