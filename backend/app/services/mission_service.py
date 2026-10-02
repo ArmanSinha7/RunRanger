@@ -49,3 +49,24 @@ def demo_mission(req: MissionRequest, templates: list[dict] | None = None) -> Mi
         screen_off_message=t["screen_off_message"],
     )
 
+
+class MissionService:
+    def __init__(self, llm: OllamaClient):
+        self.llm = llm
+
+    async def generate(self, req: MissionRequest, history: str = "none yet") -> MissionResponse:
+        if req.prefer_demo:
+            return MissionResponse(mode="demo", mission=demo_mission(req), request=req)
+
+        status = await self.llm.status()
+        if not status.running:
+            return MissionResponse(
+                mode="demo", mission=demo_mission(req), request=req,
+                notice="Ollama isn't running, so this is a sample mission. Run `ollama serve` to switch on local AI.",
+            )
+        if not status.model_installed:
+            return MissionResponse(
+                mode="demo", mission=demo_mission(req), request=req,
+                notice=f"Model {status.model} isn't installed yet. Run `ollama pull {status.model}`.",
+            )
+
