@@ -114,3 +114,15 @@ class LocalRouteProvider:
             pts[-1] = start
             geometry = pts
 
+        return Route(
+            provider="local",
+            geometry=geometry,
+            distance_km=round(path_length_km(geometry), 2),
+            notice="Offline grid route. Connect to network or run OSRM to snap to exact pedestrian streets and paths.",
+            streets=["Local Walking Paths"],
+        )
+
+
+class OsrmRouteProvider:
+    """Snaps running missions to real streets, footpaths, and designated pedestrian paths."""
+
