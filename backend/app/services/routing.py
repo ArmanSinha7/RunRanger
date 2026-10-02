@@ -159,3 +159,22 @@ class OsrmRouteProvider:
                 return None
             geometry = [(lat, lng) for lng, lat in coords_raw]
 
+            # Extract unique, clean street and path names
+            streets: list[str] = []
+            for leg in rt.get("legs", []):
+                for step in leg.get("steps", []):
+                    name = step.get("name")
+                    if name and name.strip() and name.strip() not in streets:
+                        streets.append(name.strip())
+
+            actual_km = round(rt["distance"] / 1000.0, 2)
+            return Route(
+                provider="osrm",
+                geometry=geometry,
+                distance_km=actual_km,
+                notice="Route strictly snapped to pedestrian roads, footpaths, and sidewalks (OSRM).",
+                streets=streets[:8],
+            )
+        except Exception:
+            return None
+
