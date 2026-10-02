@@ -222,3 +222,16 @@ class OsrmRouteProvider:
                 p2 = offset(snapped_start, r, heading + 2.094)
                 candidate_wps.append([snapped_start, p1, p2, snapped_start])
 
+        # 3. Query candidates in parallel
+        try:
+            async with httpx.AsyncClient(
+                timeout=7.0,
+                transport=self._transport,
+                headers={"User-Agent": "RunRanger/0.1 (open-source; github)"},
+            ) as client:
+                tasks = [
+                    self._fetch_candidate(client, wps)
+                    for wps in candidate_wps
+                ]
+                results = await asyncio.gather(*tasks, return_exceptions=True)
+
