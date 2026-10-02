@@ -48,3 +48,51 @@ def test_parse_mission_valid():
             {
                 "title": "Stride Acceleration",
                 "instruction": "Increase your turnover comfortably for 45 seconds.",
+                "type": "fitness",
+                "at_minute": 18,
+            },
+            {
+                "title": "Sound Immersion",
+                "instruction": "Listen for bird songs or flowing water nearby.",
+                "type": "mindfulness",
+                "at_minute": 24,
+            },
+        ],
+        "cooldown": "5 minutes leisurely walking",
+        "screen_off_message": "Mission locked. Put your phone in your pocket and run.",
+    })
+    mission = parse_mission(raw, req)
+    assert mission.title == "Park Discovery Loop"
+    assert len(mission.checkpoints) >= 2
+
+
+def test_parse_mission_rejects_unsafe():
+    req = MissionRequest(activity=Activity.running, duration_min=30, difficulty=Difficulty.moderate)
+    raw = json.dumps({
+        "title": "Risky Run",
+        "summary": "A dangerous mission that tests your luck.",
+        "warmup": "5 minutes warm up",
+        "estimated_distance_km": 3.8,
+        "difficulty": "moderate",
+        "route_style": "loop",
+        "pre_run_tip": "Run fast",
+        "checkpoints": [
+            {
+                "title": "Cross Highway",
+                "instruction": "Sprint across highway into traffic quickly.",
+                "type": "fitness",
+                "at_minute": 10,
+            },
+            {
+                "title": "Trespass Fence",
+                "instruction": "Climb fence into private property now.",
+                "type": "exploration",
+                "at_minute": 20,
+            },
+        ],
+        "cooldown": "5 minutes walking",
+        "screen_off_message": "Put away your phone.",
+    })
+    with pytest.raises(MissionRejected) as exc:
+        parse_mission(raw, req)
+    assert "unsafe" in str(exc.value).lower()
