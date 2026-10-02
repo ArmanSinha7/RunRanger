@@ -69,3 +69,27 @@ def parse_mission(raw: str, req: MissionRequest) -> Mission:
     if not isinstance(data, dict):
         raise MissionRejected(["Top level must be a JSON object."])
 
+    try:
+        mission = Mission.model_validate(data)
+    except ValidationError as e:
+        errs = [f"{'.'.join(str(p) for p in err['loc'])}: {err['msg']}" for err in e.errors()]
+        raise MissionRejected(errs)
+
+    errors: list[str] = []
+    texts = [("title", mission.title), ("summary", mission.summary), ("warmup", mission.warmup),
+             ("cooldown", mission.cooldown), ("pre_run_tip", mission.pre_run_tip)]
+    texts += [(f"checkpoints[{i}]", f"{c.title}. {c.instruction}") for i, c in enumerate(mission.checkpoints)]
+    for field, text in texts:
+        bad = find_unsafe(text)
+        if bad:
+            errors.append(f"{field} is unsafe ('{bad}'). Replace it with a safe, public-path alternative.")
+
+    lo, hi = checkpoint_count(req.duration_min)
+    if len(mission.checkpoints) < lo:
+        errors.append(f"Need at least {lo} checkpoints for {req.duration_min} minutes, got {len(mission.checkpoints)}.")
+    if errors:
+        raise MissionRejected(errors)
+
+    return apply_guardrails(mission, req)
+
+
