@@ -257,3 +257,8 @@ async def build_route(
     distance_km: float,
     style: str,
     seed: str,
+    checkpoint_fractions: list[float],
+) -> Route:
+    rt = await provider.route(start, distance_km, style, seed)
+    rt.checkpoints = [point_along(rt.geometry, f) for f in checkpoint_fractions]
+    return rt
