@@ -30,3 +30,27 @@ export interface Stats {
   badges: Badge[];
 }
 
+export interface RunCreate {
+  mission_title: string;
+  activity: string;
+  difficulty: string;
+  goal: string;
+  environment: string;
+  planned_minutes: number;
+  duration_sec: number;
+  distance_km: number;
+  checkpoints_total: number;
+  checkpoints_done: number;
+  finished_early?: boolean;
+  feeling?: Feeling | null;
+  note?: string | null;
+  reflection?: string | null;
+  mode: MissionMode;
+  mission: Record<string, unknown>;
+}
+
+export interface Run extends RunCreate {
+  id: number;
+  created_at: string;
+}
+
