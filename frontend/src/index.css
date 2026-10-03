@@ -52,3 +52,19 @@ body {
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5) !important;
 }
 
+.leaflet-popup-tip {
+  background-color: #1a2420 !important;
+}
+
+.leaflet-control-attribution {
+  background: rgba(18, 26, 22, 0.85) !important;
+  color: #94a39b !important;
+  font-size: 11px !important;
+  border-radius: 4px;
+  padding: 2px 6px;
+}
+
+.leaflet-control-attribution a {
+  color: #52b788 !important;
+  text-decoration: none;
+}
