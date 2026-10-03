@@ -54,3 +54,29 @@ export interface Run extends RunCreate {
   created_at: string;
 }
 
+export interface RunUpdate {
+  feeling?: Feeling | null;
+  note?: string | null;
+  reflection?: string | null;
+}
+
+export interface ReflectionRequest {
+  mission_title: string;
+  activity: string;
+  planned_minutes: number;
+  duration_sec: number;
+  distance_km: number;
+  checkpoints_total: number;
+  checkpoints_done: number;
+  completed_challenges?: string[];
+  feeling: Feeling;
+  note?: string;
+  finished_early?: boolean;
+}
+
+export interface ReflectionResponse {
+  mode: MissionMode;
+  model?: string | null;
+  reflection: string;
+  next_run: string;
+}
