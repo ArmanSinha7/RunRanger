@@ -105,3 +105,13 @@ def delete_run(run_id: int, runs: RunRepository = Depends(get_runs)) -> Response
     return Response(status_code=204)
 
 
+@router.delete("/runs", status_code=200)
+def delete_all(runs: RunRepository = Depends(get_runs)) -> dict:
+    return {"deleted": runs.delete_all()}
+
+
+@router.get("/stats", response_model=Stats)
+def stats(runs: RunRepository = Depends(get_runs)) -> Stats:
+    return runs.stats()
+
+
