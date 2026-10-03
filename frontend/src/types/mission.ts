@@ -26,3 +26,23 @@ export interface Mission {
   screen_off_message: string;
 }
 
+export interface MissionRequest {
+  activity: Activity;
+  duration_min: number;
+  difficulty: Difficulty;
+  goal: Goal;
+  environment: Environment;
+  mood: string;
+  prefer_demo?: boolean;
+}
+
+export interface MissionResponse {
+  mode: MissionMode;
+  model: string | null;
+  mission: Mission;
+  request: MissionRequest;
+  notice: string | null;
+  generation_ms: number | null;
+  attempts: number;
+}
+
