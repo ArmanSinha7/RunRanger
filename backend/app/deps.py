@@ -21,3 +21,23 @@ def get_llm() -> OllamaClient:
 def get_db() -> Database:
     return Database(settings.db_path)
 
+
+def get_runs() -> RunRepository:
+    return RunRepository(get_db())
+
+
+def get_mission_service() -> MissionService:
+    return MissionService(get_llm())
+
+
+def get_reflection_service() -> ReflectionService:
+    return ReflectionService(get_llm())
+
+
+@lru_cache
+def get_local_router() -> LocalRouteProvider:
+    return LocalRouteProvider()
+
+
+def get_osrm_router() -> OsrmRouteProvider:
+    return OsrmRouteProvider(settings.osrm_url, get_local_router())
