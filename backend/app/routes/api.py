@@ -115,3 +115,16 @@ def stats(runs: RunRepository = Depends(get_runs)) -> Stats:
     return runs.stats()
 
 
+@router.get("/export")
+def export(format: Literal["json", "csv"] = "json", runs: RunRepository = Depends(get_runs)) -> Response:
+    if format == "csv":
+        return Response(runs.export_csv(), media_type="text/csv",
+                        headers={"Content-Disposition": 'attachment; filename="runranger-data.csv"'})
+    return Response(runs.export_json(), media_type="application/json",
+                    headers={"Content-Disposition": 'attachment; filename="runranger-data.json"'})
+
+
+# ---------- reflection ----------
+@router.post("/reflection", response_model=ReflectionResponse)
+async def reflection(req: ReflectionRequest, svc: ReflectionService = Depends(get_reflection_service)) -> ReflectionResponse:
+    return await svc.reflect(req)
