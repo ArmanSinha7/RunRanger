@@ -70,3 +70,33 @@ def test_api_runs_and_stats(client: TestClient):
     assert st_res.status_code == 200
     assert st_res.json()["total_runs"] == 0
 
+    # Save a run
+    run_payload = {
+        "mission_title": "Sunset Explorer",
+        "activity": "running",
+        "difficulty": "moderate",
+        "goal": "exploration",
+        "environment": "neighborhood",
+        "planned_minutes": 30,
+        "duration_sec": 1820,
+        "distance_km": 4.2,
+        "checkpoints_total": 3,
+        "checkpoints_done": 3,
+        "finished_early": False,
+        "feeling": "amazing",
+        "note": "Loved the fresh air",
+        "reflection": "Steady progress.",
+        "mode": "demo",
+        "mission": {},
+    }
+    create_res = client.post("/api/runs", json=run_payload)
+    assert create_res.status_code == 201
+    created_id = create_res.json()["id"]
+
+    # List runs
+    list_res = client.get("/api/runs")
+    assert list_res.status_code == 200
+    runs = list_res.json()
+    assert len(runs) == 1
+    assert runs[0]["id"] == created_id
+
