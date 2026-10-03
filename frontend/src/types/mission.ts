@@ -46,3 +46,21 @@ export interface MissionResponse {
   attempts: number;
 }
 
+export interface RouteRequest {
+  lat: number;
+  lng: number;
+  distance_km: number;
+  style: RouteStyle;
+  seed?: string;
+  checkpoint_fractions?: number[];
+  provider?: 'local' | 'osrm';
+}
+
+export interface RouteResponse {
+  provider: 'local' | 'osrm';
+  geometry: [number, number][];
+  checkpoints: [number, number][];
+  distance_km: number;
+  notice: string | null;
+  streets?: string[];
+}
