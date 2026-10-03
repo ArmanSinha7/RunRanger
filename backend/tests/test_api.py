@@ -28,3 +28,21 @@ def test_api_health(client: TestClient):
     assert "model" in data
 
 
+def test_api_create_mission_prefer_demo(client: TestClient):
+    payload = {
+        "activity": "running",
+        "duration_min": 25,
+        "difficulty": "moderate",
+        "goal": "nature",
+        "environment": "park",
+        "mood": "clearing my head",
+        "prefer_demo": True,
+    }
+    res = client.post("/api/missions", json=payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["mode"] == "demo"
+    assert data["mission"]["title"]
+    assert len(data["mission"]["checkpoints"]) >= 2
+
+
