@@ -58,3 +58,23 @@ class RouteRequest(BaseModel):
     checkpoint_fractions: list[float] = Field(default_factory=list, max_length=10)
     provider: Literal["osrm", "local"] = "osrm"
 
+
+class RouteResponse(BaseModel):
+    provider: Literal["local", "osrm"]
+    geometry: list[tuple[float, float]]
+    checkpoints: list[tuple[float, float]]
+    distance_km: float
+    notice: str | None = None
+    streets: list[str] = Field(default_factory=list)
+
+
+@router.post("/route", response_model=RouteResponse)
+async def route(req: RouteRequest, local: LocalRouteProvider = Depends(get_local_router),
+                osrm: OsrmRouteProvider = Depends(get_osrm_router)) -> RouteResponse:
+    # The start point is used for this computation only; it is never written to disk.
+    provider = osrm if req.provider == "osrm" else local
+    rt = await build_route(provider, (req.lat, req.lng), req.distance_km, req.style, req.seed,
+                           [min(max(f, 0.0), 1.0) for f in req.checkpoint_fractions])
+    return RouteResponse(provider=rt.provider, geometry=rt.geometry, checkpoints=rt.checkpoints,
+                         distance_km=rt.distance_km, notice=rt.notice, streets=rt.streets)
+
