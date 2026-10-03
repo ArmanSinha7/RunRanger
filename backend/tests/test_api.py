@@ -46,3 +46,27 @@ def test_api_create_mission_prefer_demo(client: TestClient):
     assert len(data["mission"]["checkpoints"]) >= 2
 
 
+def test_api_route_local(client: TestClient):
+    payload = {
+        "lat": 40.785091,
+        "lng": -73.968285,
+        "distance_km": 3.0,
+        "style": "loop",
+        "seed": "test",
+        "checkpoint_fractions": [0.33, 0.66],
+        "provider": "local",
+    }
+    res = client.post("/api/route", json=payload)
+    assert res.status_code == 200
+    data = res.json()
+    assert data["provider"] == "local"
+    assert len(data["geometry"]) > 5
+    assert len(data["checkpoints"]) == 2
+
+
+def test_api_runs_and_stats(client: TestClient):
+    # Empty stats
+    st_res = client.get("/api/stats")
+    assert st_res.status_code == 200
+    assert st_res.json()["total_runs"] == 0
+
