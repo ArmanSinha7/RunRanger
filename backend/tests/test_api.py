@@ -100,3 +100,20 @@ def test_api_runs_and_stats(client: TestClient):
     assert len(runs) == 1
     assert runs[0]["id"] == created_id
 
+    # Check stats updated
+    st_res2 = client.get("/api/stats")
+    assert st_res2.json()["total_runs"] == 1
+
+    # Export
+    exp_json = client.get("/api/export?format=json")
+    assert exp_json.status_code == 200
+    assert "Sunset Explorer" in exp_json.text
+
+    exp_csv = client.get("/api/export?format=csv")
+    assert exp_csv.status_code == 200
+    assert "Sunset Explorer" in exp_csv.text
+
+    # Delete
+    del_res = client.delete(f"/api/runs/{created_id}")
+    assert del_res.status_code == 204
+    assert len(client.get("/api/runs").json()) == 0
