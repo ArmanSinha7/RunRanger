@@ -78,3 +78,15 @@ async def route(req: RouteRequest, local: LocalRouteProvider = Depends(get_local
     return RouteResponse(provider=rt.provider, geometry=rt.geometry, checkpoints=rt.checkpoints,
                          distance_km=rt.distance_km, notice=rt.notice, streets=rt.streets)
 
+
+# ---------- runs ----------
+@router.get("/runs", response_model=list[Run])
+def list_runs(limit: int = 50, runs: RunRepository = Depends(get_runs)) -> list[Run]:
+    return runs.list(min(max(limit, 1), 500))
+
+
+@router.post("/runs", response_model=Run, status_code=201)
+def save_run(run: RunCreate, runs: RunRepository = Depends(get_runs)) -> Run:
+    return runs.create(run)
+
+
