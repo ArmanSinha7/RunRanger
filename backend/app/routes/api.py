@@ -90,3 +90,18 @@ def save_run(run: RunCreate, runs: RunRepository = Depends(get_runs)) -> Run:
     return runs.create(run)
 
 
+@router.patch("/runs/{run_id}", response_model=Run)
+def update_run(run_id: int, patch: RunUpdate, runs: RunRepository = Depends(get_runs)) -> Run:
+    r = runs.update(run_id, patch)
+    if not r:
+        raise HTTPException(404, "Run not found")
+    return r
+
+
+@router.delete("/runs/{run_id}", status_code=204)
+def delete_run(run_id: int, runs: RunRepository = Depends(get_runs)) -> Response:
+    if not runs.delete(run_id):
+        raise HTTPException(404, "Run not found")
+    return Response(status_code=204)
+
+
