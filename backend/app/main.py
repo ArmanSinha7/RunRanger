@@ -26,3 +26,14 @@ async def friendly_errors(request: Request, exc: Exception) -> JSONResponse:
     return JSONResponse(status_code=500, content={"detail": "Something went wrong on the local server. Please try again."})
 
 
+# Serve the built frontend (frontend/dist) if present, so `./scripts/start.sh --prod` is one process.
+DIST = Path(PROJECT_DIR / "frontend" / "dist")
+if DIST.is_dir():
+    app.mount("/assets", StaticFiles(directory=DIST / "assets"), name="assets")
+
+    @app.get("/{full_path:path}", include_in_schema=False)
+    async def spa(full_path: str):
+        candidate = DIST / full_path
+        if full_path and candidate.is_file():
+            return FileResponse(candidate)
+        return FileResponse(DIST / "index.html")
