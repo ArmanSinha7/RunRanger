@@ -35,3 +35,30 @@ export function getLastMission(): MissionResponse | null {
   }
 }
 
+export function saveUserPrefs(prefs: Partial<UserPrefs>): UserPrefs {
+  try {
+    const current = getUserPrefs();
+    const updated = { ...current, ...prefs };
+    localStorage.setItem(USER_PREFS_KEY, JSON.stringify(updated));
+    return updated;
+  } catch {
+    return DEFAULT_PREFS;
+  }
+}
+
+export function getUserPrefs(): UserPrefs {
+  try {
+    const raw = localStorage.getItem(USER_PREFS_KEY);
+    return raw ? { ...DEFAULT_PREFS, ...JSON.parse(raw) } : DEFAULT_PREFS;
+  } catch {
+    return DEFAULT_PREFS;
+  }
+}
+
+export function clearActiveRunState(): void {
+  try {
+    localStorage.removeItem(ACTIVE_RUN_KEY);
+  } catch {
+    // Ignore
+  }
+}
