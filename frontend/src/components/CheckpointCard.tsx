@@ -70,3 +70,28 @@ export const CheckpointCard: React.FC<CheckpointCardProps> = ({
             )}
           </div>
 
+          <div>
+            <div className="flex flex-wrap items-center gap-2 mb-1">
+              <span className={`font-semibold text-sm sm:text-base ${completed ? 'line-through text-zinc-400' : 'text-zinc-100'}`}>
+                {checkpoint.title}
+              </span>
+              <span className="text-xs text-zinc-400 font-mono">
+                ~{checkpoint.at_minute} min
+              </span>
+            </div>
+
+            <p className={`text-xs sm:text-sm leading-relaxed ${completed ? 'text-zinc-500' : 'text-zinc-300'}`}>
+              {checkpoint.instruction}
+            </p>
+          </div>
+        </div>
+
+        {/* Type Badge */}
+        <div className={`flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-medium border shrink-0 ${config.color}`}>
+          <Icon className="w-3 h-3" />
+          <span className="hidden sm:inline">{config.label}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
