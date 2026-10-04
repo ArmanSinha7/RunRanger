@@ -34,3 +34,38 @@ export function useRunTracker(mission: Mission | null) {
     return mission.checkpoints.length - 1;
   })();
 
+  const startRun = useCallback(() => {
+    setStatus('running');
+    triggerHaptic([100, 50, 100]);
+  }, []);
+
+  const pauseRun = useCallback(() => {
+    setStatus('paused');
+    triggerHaptic(80);
+  }, []);
+
+  const resumeRun = useCallback(() => {
+    setStatus('running');
+    triggerHaptic(80);
+  }, []);
+
+  const finishRun = useCallback(() => {
+    setStatus('finished');
+    triggerHaptic([200, 100, 300]);
+  }, []);
+
+  const toggleCheckpoint = useCallback((idx: number) => {
+    setCompletedCheckpoints((prev) => {
+      if (prev.includes(idx)) {
+        return prev.filter((i) => i !== idx);
+      } else {
+        playCheckpointChime();
+        return [...prev, idx];
+      }
+    });
+  }, []);
+
+  const toggleSimulatedSpeed = useCallback(() => {
+    setIsSimulatedSpeed((prev) => !prev);
+  }, []);
+
