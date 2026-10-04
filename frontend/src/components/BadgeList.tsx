@@ -27,3 +27,14 @@ export const BadgeList: React.FC<BadgeListProps> = ({ badges }) => {
             )}
           </div>
 
+          <span className="font-semibold text-xs sm:text-sm text-zinc-100 mb-1">
+            {badge.name}
+          </span>
+          <span className="text-[11px] text-zinc-400 leading-tight">
+            {badge.description}
+          </span>
+        </div>
+      ))}
+    </div>
+  );
+};
