@@ -56,3 +56,49 @@ export const Navbar: React.FC<NavbarProps> = ({
             Start Run
           </button>
 
+          <button
+            onClick={() => setTab('dashboard')}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors cursor-pointer flex items-center gap-1.5 ${
+              currentTab === 'dashboard'
+                ? 'bg-emerald-600 text-white'
+                : 'text-zinc-300 hover:text-white hover:bg-zinc-800/60'
+            }`}
+          >
+            <Activity className="w-4 h-4" />
+            <span>Dashboard</span>
+          </button>
+
+          {/* AI / Demo Mode Pill */}
+          <div
+            className={`hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium border ${
+              isAIMode
+                ? 'bg-emerald-950/80 text-emerald-300 border-emerald-700/60'
+                : 'bg-amber-950/80 text-amber-300 border-amber-700/60'
+            }`}
+            title={health?.message || 'AI Status'}
+          >
+            {isAIMode ? (
+              <>
+                <Sparkles className="w-3.5 h-3.5 text-emerald-400" />
+                <span>Gemma 3 (Local)</span>
+              </>
+            ) : (
+              <>
+                <ShieldCheck className="w-3.5 h-3.5 text-amber-400" />
+                <span>Demo Mode</span>
+              </>
+            )}
+          </div>
+
+          <button
+            onClick={onOpenHowItWorks}
+            className="p-2 rounded-lg text-zinc-400 hover:text-zinc-200 hover:bg-zinc-800/60 transition-colors cursor-pointer"
+            title="How It Works & Philosophy"
+          >
+            <HelpCircle className="w-5 h-5" />
+          </button>
+        </div>
+      </div>
+    </header>
+  );
+};
