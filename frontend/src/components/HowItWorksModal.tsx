@@ -50,3 +50,81 @@ export const HowItWorksModal: React.FC<HowItWorksModalProps> = ({ isOpen, onClos
           </p>
         </div>
 
+        {/* 4 Steps */}
+        <div className="space-y-3">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">
+            How It Works
+          </h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+            <div className="p-3 rounded-lg bg-[#16221c] border border-[#24352d]">
+              <span className="font-bold text-emerald-400 block mb-1">1. Pick Your Run</span>
+              <p className="text-xs text-zinc-300">
+                Choose your activity, target duration, terrain, and how you feel today.
+              </p>
+            </div>
+            <div className="p-3 rounded-lg bg-[#16221c] border border-[#24352d]">
+              <span className="font-bold text-emerald-400 block mb-1">2. Get Your Mission</span>
+              <p className="text-xs text-zinc-300">
+                Local Gemma 3 4B creates real-world checkpoints, nature observations, and pacing bursts.
+              </p>
+            </div>
+            <div className="p-3 rounded-lg bg-[#16221c] border border-[#24352d]">
+              <span className="font-bold text-emerald-400 block mb-1">3. Put Phone Away</span>
+              <p className="text-xs text-zinc-300">
+                Hit "Lock Phone & Start". Pocket your phone. Run with your senses open.
+              </p>
+            </div>
+            <div className="p-3 rounded-lg bg-[#16221c] border border-[#24352d]">
+              <span className="font-bold text-emerald-400 block mb-1">4. Touch Grass & Reflect</span>
+              <p className="text-xs text-zinc-300">
+                Finish your run, view your local stats, and get an on-device reflection from Gemma.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Privacy & Zero Cost Badges */}
+        <div className="space-y-3">
+          <h3 className="text-sm font-semibold uppercase tracking-wider text-zinc-400">
+            Absolute Guarantees
+          </h3>
+          <div className="space-y-2">
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-zinc-900/60 border border-zinc-800">
+              <ShieldCheck className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+              <div>
+                <span className="text-xs font-semibold text-zinc-200 block">
+                  100% Privacy-First & Local
+                </span>
+                <p className="text-xs text-zinc-400">
+                  Your activity and location data stay on your device unless you explicitly choose to export them. No accounts, no analytics, no tracking pixels, no telemetry.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-start gap-3 p-3 rounded-lg bg-zinc-900/60 border border-zinc-800">
+              <Cpu className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+              <div>
+                <span className="text-xs font-semibold text-zinc-200 block">
+                  Zero Cost & Genuine Open-Weight AI
+                </span>
+                <p className="text-xs text-zinc-400">
+                  Powered by Ollama + Gemma 3 4B running on your local machine. No OpenAI, Anthropic, or Gemini cloud API keys. If Ollama isn't installed, Demo Mode delivers deterministic offline sample missions.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="pt-2 flex justify-end">
+          <button
+            onClick={onClose}
+            className="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-medium text-sm transition-colors cursor-pointer"
+          >
+            Got it, let's run!
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
