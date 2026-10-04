@@ -34,3 +34,15 @@ export function formatPace(totalSeconds: number, distanceKm: number): string {
   return `${paceMins}'${paceSecs.toString().padStart(2, '0')}" /km`;
 }
 
+export function formatDate(isoString: string): string {
+  try {
+    const d = new Date(isoString);
+    return d.toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  } catch {
+    return isoString;
+  }
+}
