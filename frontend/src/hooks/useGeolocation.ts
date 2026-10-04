@@ -79,3 +79,25 @@ export function useGeolocation() {
     );
   }, []);
 
+  useEffect(() => {
+    requestPosition();
+  }, [requestPosition]);
+
+  const setManualLocation = useCallback((lat: number, lng: number) => {
+    setState({
+      lat,
+      lng,
+      accuracy: null,
+      loading: false,
+      error: null,
+      permissionState: 'granted',
+      isSimulated: true,
+    });
+  }, []);
+
+  return {
+    ...state,
+    refresh: requestPosition,
+    setManualLocation,
+  };
+}
