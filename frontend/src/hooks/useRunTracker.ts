@@ -103,3 +103,18 @@ export function useRunTracker(mission: Mission | null) {
     };
   }, [status, isSimulatedSpeed]);
 
+  return {
+    status,
+    elapsedSeconds,
+    distanceKm,
+    completedCheckpoints,
+    currentCheckpointIndex,
+    isSimulatedSpeed,
+    startRun,
+    pauseRun,
+    resumeRun,
+    finishRun,
+    toggleCheckpoint,
+    toggleSimulatedSpeed,
+  };
+}
