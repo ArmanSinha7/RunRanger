@@ -40,3 +40,42 @@ export function useGeolocation() {
 
     setState((prev) => ({ ...prev, loading: true, error: null }));
 
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setState({
+          lat: pos.coords.latitude,
+          lng: pos.coords.longitude,
+          accuracy: pos.coords.accuracy,
+          loading: false,
+          error: null,
+          permissionState: 'granted',
+          isSimulated: false,
+        });
+      },
+      (err) => {
+        let msg = 'Unable to retrieve location.';
+        let perm: GeolocationState['permissionState'] = 'prompt';
+        if (err.code === err.PERMISSION_DENIED) {
+          msg = 'Location permission denied. Running in local fallback location mode.';
+          perm = 'denied';
+        } else if (err.code === err.POSITION_UNAVAILABLE) {
+          msg = 'Location unavailable. Running in local fallback location mode.';
+        } else if (err.code === err.TIMEOUT) {
+          msg = 'Location request timed out. Running in local fallback location mode.';
+        }
+        setState((prev) => ({
+          ...prev,
+          loading: false,
+          error: msg,
+          permissionState: perm,
+          isSimulated: true,
+        }));
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 10000,
+        maximumAge: 60000,
+      }
+    );
+  }, []);
+
