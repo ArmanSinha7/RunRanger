@@ -36,3 +36,26 @@ export async function fetchHealth(): Promise<Health> {
   }
 }
 
+export async function createMission(req: MissionRequest): Promise<MissionResponse> {
+  const res = await fetch(`${API_BASE}/missions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(req),
+  });
+  return handleResponse<MissionResponse>(res);
+}
+
+export async function fetchRoute(req: RouteRequest): Promise<RouteResponse> {
+  const res = await fetch(`${API_BASE}/route`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(req),
+  });
+  return handleResponse<RouteResponse>(res);
+}
+
+export async function listRuns(limit = 50): Promise<Run[]> {
+  const res = await fetch(`${API_BASE}/runs?limit=${limit}`);
+  return handleResponse<Run[]>(res);
+}
+
