@@ -59,3 +59,30 @@ export async function listRuns(limit = 50): Promise<Run[]> {
   return handleResponse<Run[]>(res);
 }
 
+export async function saveRun(run: RunCreate): Promise<Run> {
+  const res = await fetch(`${API_BASE}/runs`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(run),
+  });
+  return handleResponse<Run>(res);
+}
+
+export async function updateRun(id: number, patch: RunUpdate): Promise<Run> {
+  const res = await fetch(`${API_BASE}/runs/${id}`, {
+    method: 'PATCH',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(patch),
+  });
+  return handleResponse<Run>(res);
+}
+
+export async function deleteRun(id: number): Promise<void> {
+  const res = await fetch(`${API_BASE}/runs/${id}`, {
+    method: 'DELETE',
+  });
+  if (!res.ok) {
+    throw new Error(`Failed to delete run ${id}`);
+  }
+}
+
