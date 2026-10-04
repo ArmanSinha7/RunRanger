@@ -82,3 +82,47 @@ export const MapView: React.FC<MapViewProps> = ({
 
       routeLayersRef.current = [casing, polyline];
 
+      // Fit map to show full route with padding
+      map.fitBounds(polyline.getBounds(), {
+        padding: [30, 30],
+        maxZoom: 17,
+      });
+    }
+
+    // Custom SVG Icon Helper
+    const createCustomIcon = (label: string, bg: string, textCol = '#ffffff') => {
+      return L.divIcon({
+        className: 'custom-map-marker',
+        html: `
+          <div style="
+            background: ${bg};
+            color: ${textCol};
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.6);
+            border: 2px solid #ffffff;
+          ">
+            ${label}
+          </div>
+        `,
+        iconSize: [28, 28],
+        iconAnchor: [14, 14],
+        popupAnchor: [0, -14],
+      });
+    };
+
+    // Add Start marker
+    const origin = startPoint || geometry[0];
+    if (origin && markersLayerRef.current) {
+      const startMarker = L.marker(origin, {
+        icon: createCustomIcon('▶', '#059669'),
+      }).bindPopup('<b>Start & Finish Point</b><br><span style="font-size:11px;color:#9ca3af;">Located on walkable street</span>');
+      markersLayerRef.current.addLayer(startMarker);
+    }
+
