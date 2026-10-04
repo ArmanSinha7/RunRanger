@@ -44,3 +44,33 @@ export const FocusOverlay: React.FC<FocusOverlayProps> = ({
           </div>
         </div>
 
+        <button
+          onClick={handlePocketToggle}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-zinc-900 border border-zinc-800 text-xs font-medium text-zinc-300 hover:text-white cursor-pointer"
+        >
+          {pocketDim ? <Sun className="w-3.5 h-3.5" /> : <Lock className="w-3.5 h-3.5" />}
+          <span>{pocketDim ? 'Exit Dim' : 'Battery Saver Dim'}</span>
+        </button>
+      </div>
+
+      {/* Center Statement */}
+      <div className="max-w-md mx-auto text-center my-auto space-y-6">
+        <div className="text-6xl animate-bounce">🏃</div>
+        <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-emerald-300">
+          Your mission has begun.
+        </h1>
+        <p className="text-lg sm:text-xl text-zinc-300 font-medium">
+          You don't need to stare at this screen.
+        </p>
+        <p className="text-sm sm:text-base text-emerald-400/90 font-mono bg-emerald-950/40 p-4 rounded-xl border border-emerald-900/60">
+          "{screenOffMessage}"
+        </p>
+
+        {nextCheckpointTitle && (
+          <div className="pt-2 text-xs sm:text-sm text-zinc-400">
+            <span className="text-zinc-500 uppercase tracking-wider block mb-1">Up Next</span>
+            <span className="text-emerald-200 font-semibold">{nextCheckpointTitle}</span>
+          </div>
+        )}
+      </div>
+
