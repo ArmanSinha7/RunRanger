@@ -86,3 +86,27 @@ export async function deleteRun(id: number): Promise<void> {
   }
 }
 
+export async function deleteAllRuns(): Promise<{ deleted: number }> {
+  const res = await fetch(`${API_BASE}/runs`, {
+    method: 'DELETE',
+  });
+  return handleResponse<{ deleted: number }>(res);
+}
+
+export async function fetchStats(): Promise<Stats> {
+  const res = await fetch(`${API_BASE}/stats`);
+  return handleResponse<Stats>(res);
+}
+
+export async function fetchReflection(req: ReflectionRequest): Promise<ReflectionResponse> {
+  const res = await fetch(`${API_BASE}/reflection`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(req),
+  });
+  return handleResponse<ReflectionResponse>(res);
+}
+
+export function getExportUrl(format: 'json' | 'csv' = 'json'): string {
+  return `${API_BASE}/export?format=${format}`;
+}
