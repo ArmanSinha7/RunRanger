@@ -37,3 +37,48 @@ export const MapView: React.FC<MapViewProps> = ({
         scrollWheelZoom: false,
       });
 
+      // Free OpenStreetMap Tile Layer with standard OpenStreetMap attribution
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution:
+          '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors',
+      }).addTo(map);
+
+      markersLayerRef.current = L.layerGroup().addTo(map);
+      mapInstanceRef.current = map;
+    }
+
+    const map = mapInstanceRef.current;
+    if (!map) return;
+
+    // Clear previous markers
+    if (markersLayerRef.current) {
+      markersLayerRef.current.clearLayers();
+    }
+
+    // Clear previous route polylines
+    routeLayersRef.current.forEach((layer) => map.removeLayer(layer));
+    routeLayersRef.current = [];
+
+    if (geometry.length > 0) {
+      // Background dark casing line to pop sharply against OSM road lines
+      const casing = L.polyline(geometry, {
+        color: '#064e3b',
+        weight: 8,
+        opacity: 0.95,
+        lineCap: 'round',
+        lineJoin: 'round',
+      }).addTo(map);
+
+      // Foreground bright emerald street route line
+      const polyline = L.polyline(geometry, {
+        color: '#10b981',
+        weight: 5,
+        opacity: 1.0,
+        smoothFactor: 1,
+        lineCap: 'round',
+        lineJoin: 'round',
+      }).addTo(map);
+
+      routeLayersRef.current = [casing, polyline];
+
