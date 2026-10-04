@@ -69,3 +69,37 @@ export function useRunTracker(mission: Mission | null) {
     setIsSimulatedSpeed((prev) => !prev);
   }, []);
 
+  // Main timer loop
+  useEffect(() => {
+    if (status !== 'running') {
+      if (timerRef.current) clearInterval(timerRef.current);
+      return;
+    }
+
+    const intervalMs = isSimulatedSpeed ? 100 : 1000;
+    const stepSeconds = isSimulatedSpeed ? 10 : 1;
+
+    timerRef.current = window.setInterval(() => {
+      setElapsedSeconds((prev) => {
+        const nextSec = prev + stepSeconds;
+        const currentMission = missionRef.current;
+
+        // Update simulated distance proportionally to planned pace
+        if (currentMission && currentMission.estimated_distance_km > 0) {
+          const totalPlannedSec = (currentMission.checkpoints.slice(-1)[0]?.at_minute || 30) * 60;
+          const ratio = Math.min(nextSec / Math.max(totalPlannedSec, 60), 1.2);
+          setDistanceKm(Number((currentMission.estimated_distance_km * ratio).toFixed(2)));
+        } else {
+          // Default estimation (~5 min/km for run or ~10 min/km for walk)
+          setDistanceKm(Number((nextSec / 400).toFixed(2)));
+        }
+
+        return nextSec;
+      });
+    }, intervalMs);
+
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [status, isSimulatedSpeed]);
+
