@@ -74,3 +74,23 @@ export const FocusOverlay: React.FC<FocusOverlayProps> = ({
         )}
       </div>
 
+      {/* Bottom Wake / Unlock Control */}
+      <div className="max-w-sm mx-auto w-full text-center space-y-3">
+        <button
+          onClick={() => {
+            triggerHaptic(80);
+            onUnlock();
+          }}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-bold text-base shadow-lg shadow-emerald-950/60 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <Eye className="w-5 h-5" />
+          <span>View Progress / Pause Run</span>
+        </button>
+
+        <p className="text-[11px] text-zinc-500">
+          Locking your device will not disrupt the mission timer.
+        </p>
+      </div>
+    </div>
+  );
+};
