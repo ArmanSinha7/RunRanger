@@ -40,3 +40,44 @@ source .venv/bin/activate
 pip install -r requirements.txt  # or run ./scripts/dev.sh
 ```
 
+### 3. Setup Frontend
+
+```bash
+cd ../frontend
+npm install
+```
+
+### 4. Running Locally
+
+You can use the helper script from the project root:
+
+```bash
+./scripts/dev.sh
+```
+
+Or run each service separately:
+
+- **Backend**: `cd backend && source .venv/bin/activate && uvicorn app.main:app --reload --port 8000`
+- **Frontend**: `cd frontend && npm run dev`
+
+### 5. Running Tests
+
+Before submitting a Pull Request, verify all tests pass:
+
+```bash
+# Run all tests (frontend + backend)
+./scripts/test.sh
+
+# Or run separately:
+cd backend && pytest
+cd frontend && npm test && npm run build
+```
+
+---
+
+## Submitting Pull Requests
+
+1. Fork the repository and create your feature branch: `git checkout -b feature/my-new-feature`.
+2. Commit your changes with clear, descriptive commit messages.
+3. Ensure formatting and tests pass.
+4. Open a Pull Request explaining the problem, the solution, and verification steps.
