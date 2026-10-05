@@ -94,3 +94,104 @@ export const CreateRunPage: React.FC<CreateRunPageProps> = ({
     setEnvironment(randomEnv);
   };
 
+  return (
+    <div className="max-w-2xl mx-auto px-4 py-6 sm:py-10 space-y-8">
+      {/* Title */}
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
+            Create Your Mission
+          </h1>
+          <p className="text-xs sm:text-sm text-zinc-400 mt-1">
+            Configure your run. RunRanger turns it into an outdoor mission.
+          </p>
+        </div>
+
+        <button
+          type="button"
+          onClick={handleRandomize}
+          className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-[#16221c] border border-[#24352d] text-xs font-semibold text-emerald-400 hover:text-emerald-300 hover:bg-[#1e3027] transition-all cursor-pointer"
+          title="Randomize parameters"
+        >
+          <Shuffle className="w-3.5 h-3.5" />
+          <span>Surprise Run</span>
+        </button>
+      </div>
+
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {/* 1. Activity */}
+        <div className="space-y-2.5">
+          <label className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+            1. Activity
+          </label>
+          <div className="grid grid-cols-3 gap-2.5">
+            {ACTIVITIES.map((act) => (
+              <button
+                key={act.id}
+                type="button"
+                onClick={() => setActivity(act.id)}
+                className={`py-3 px-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                  activity === act.id
+                    ? 'bg-emerald-950/70 border-emerald-500 text-white shadow-lg shadow-emerald-950/50'
+                    : 'bg-[#141e18] border-[#22332a] text-zinc-400 hover:text-zinc-200 hover:bg-[#1a2821]'
+                }`}
+              >
+                <span className="text-2xl">{act.icon}</span>
+                <span className="text-xs sm:text-sm font-semibold">{act.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 2. Duration */}
+        <div className="space-y-2.5">
+          <div className="flex items-center justify-between">
+            <label className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              2. Target Duration
+            </label>
+            <span className="text-xs font-mono font-bold text-zinc-300">
+              {duration} minutes
+            </span>
+          </div>
+
+          <div className="grid grid-cols-4 gap-2">
+            {DURATIONS.map((dur) => (
+              <button
+                key={dur.value}
+                type="button"
+                onClick={() => {
+                  setDuration(dur.value);
+                  setCustomDuration(false);
+                }}
+                className={`py-2.5 rounded-xl border text-xs sm:text-sm font-semibold transition-all cursor-pointer ${
+                  duration === dur.value && !customDuration
+                    ? 'bg-emerald-950/70 border-emerald-500 text-emerald-300'
+                    : 'bg-[#141e18] border-[#22332a] text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                {dur.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Custom Duration Slider */}
+          <div className="pt-2">
+            <div className="flex items-center gap-3">
+              <span className="text-[11px] text-zinc-500">10m</span>
+              <input
+                type="range"
+                min="10"
+                max="90"
+                step="5"
+                value={duration}
+                onChange={(e) => {
+                  setDuration(Number(e.target.value));
+                  setCustomDuration(true);
+                }}
+                className="w-full accent-emerald-500 cursor-pointer"
+              />
+              <span className="text-[11px] text-zinc-500">90m</span>
+            </div>
+          </div>
+        </div>
+
