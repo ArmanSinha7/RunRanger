@@ -175,3 +175,16 @@ runranger/
 └── README.md
 ```
 
+---
+
+## 📜 Open-Source License
+
+RunRanger is licensed under the permissive [MIT License](LICENSE).
+OpenStreetMap data is &copy; [OpenStreetMap contributors](https://www.openstreetmap.org/copyright).
+
+---
+
+<div align="center">
+  <b>Built for Hacktoberfest 2026 • Theme: Touch Grass 🌱</b><br/>
+  <i>Go run. Breathe fresh air. Put the screen away.</i>
+</div>
