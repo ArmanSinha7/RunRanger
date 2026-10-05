@@ -202,3 +202,53 @@ export const MissionPage: React.FC<MissionPageProps> = ({
         )}
       </div>
 
+      {/* Checkpoints Sequence */}
+      <div className="space-y-3">
+        <h2 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
+          <span>Mission Checkpoints & Real-World Observations</span>
+          <span className="text-xs font-normal text-zinc-500">
+            ({mission.checkpoints.length} total)
+          </span>
+        </h2>
+
+        <div className="space-y-2.5">
+          {mission.checkpoints.map((cp, idx) => (
+            <CheckpointCard key={idx} checkpoint={cp} index={idx} />
+          ))}
+        </div>
+      </div>
+
+      {/* Cooldown */}
+      <div className="p-3.5 rounded-xl bg-[#141e18] border border-[#22332a] flex items-center justify-between text-xs sm:text-sm">
+        <div className="flex items-center gap-2 text-zinc-300">
+          <span className="font-bold text-teal-400 uppercase text-xs">Cooldown:</span>
+          <span>{mission.cooldown}</span>
+        </div>
+      </div>
+
+      {/* Screen Off Message & Prominent Lock Button */}
+      <div className="p-6 rounded-3xl bg-gradient-to-br from-[#122419] to-[#0d1612] border border-[#203a2a] text-center space-y-4 shadow-xl">
+        <div className="max-w-md mx-auto space-y-2">
+          <span className="text-xs uppercase font-mono tracking-widest text-emerald-400 font-semibold">
+            Ready for Departure
+          </span>
+          <p className="text-sm text-zinc-300 italic">
+            "{mission.screen_off_message}"
+          </p>
+        </div>
+
+        <button
+          onClick={onLockAndStart}
+          className="w-full sm:max-w-md mx-auto py-5 rounded-2xl bg-gradient-to-r from-emerald-500 via-teal-600 to-emerald-600 hover:from-emerald-400 hover:to-teal-500 text-white font-extrabold text-lg shadow-2xl shadow-emerald-950/80 active:scale-98 transition-all flex items-center justify-center gap-3 cursor-pointer group"
+        >
+          <Lock className="w-6 h-6 text-emerald-200 group-hover:scale-110 transition-transform" />
+          <span>LOCK PHONE & START</span>
+        </button>
+
+        <p className="text-xs text-zinc-400">
+          Starts your run timer and places the app into distraction-free mode.
+        </p>
+      </div>
+    </div>
+  );
+};
