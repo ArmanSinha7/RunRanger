@@ -303,3 +303,60 @@ export default function App() {
           />
         )}
 
+        {tab === 'dashboard' && (
+          <DashboardPage
+            stats={stats}
+            runs={runs}
+            onDeleteRun={handleDeleteRun}
+            onDeleteAll={handleDeleteAll}
+            onRefresh={loadInitialData}
+            onNewRun={() => setTab('create')}
+          />
+        )}
+      </main>
+
+      {/* Focus Mode Screen Overlay (Locks screen to encourage looking at nature) */}
+      {showFocusOverlay && (
+        <FocusOverlay
+          missionTitle={missionData?.mission.title || 'Outdoor Mission'}
+          nextCheckpointTitle={
+            missionData?.mission.checkpoints[tracker.currentCheckpointIndex]?.title
+          }
+          screenOffMessage={missionData?.mission.screen_off_message}
+          onUnlock={() => setShowFocusOverlay(false)}
+        />
+      )}
+
+      {/* How It Works & Philosophy Modal */}
+      <HowItWorksModal
+        isOpen={showHowItWorks}
+        onClose={() => setShowHowItWorks(false)}
+      />
+
+      {/* Footer */}
+      <footer className="border-t border-[#1a2620] py-6 px-4 text-center text-xs text-zinc-500 space-y-2">
+        <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1">
+          <span className="text-zinc-400">RunRanger • Hacktoberfest 2026</span>
+          <span>•</span>
+          <span>Theme: Touch Grass</span>
+          <span>•</span>
+          <span>100% Local Open-Weight AI (Gemma 3)</span>
+          <span>•</span>
+          <span>₹0 Cost Architecture</span>
+        </div>
+        <div>
+          Map data &copy;{' '}
+          <a
+            href="https://www.openstreetmap.org/copyright"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-emerald-400 hover:underline"
+          >
+            OpenStreetMap contributors
+          </a>
+          . All activity data stored locally in SQLite.
+        </div>
+      </footer>
+    </div>
+  );
+}
