@@ -198,3 +198,87 @@ export const PostRunPage: React.FC<PostRunPageProps> = ({
           </p>
         </div>
 
+        {/* Emojis */}
+        <div className="grid grid-cols-5 gap-2">
+          {FEELING_OPTIONS.map((opt) => (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => setSelectedFeeling(opt.value)}
+              className={`p-3 rounded-2xl border text-center transition-all cursor-pointer flex flex-col items-center gap-1 ${
+                selectedFeeling === opt.value
+                  ? 'bg-emerald-950/80 border-emerald-500 shadow-md shadow-emerald-950/50 scale-105'
+                  : 'bg-[#15221b] border-[#22362b] hover:bg-[#1c2e24]'
+              }`}
+            >
+              <span className="text-2xl">{opt.emoji}</span>
+              <span className="text-[11px] font-semibold text-zinc-300 capitalize">{opt.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Optional text reflection */}
+        <div className="space-y-2">
+          <label className="text-xs font-bold uppercase tracking-wider text-emerald-400 block">
+            Optional Notes / Observations
+          </label>
+          <input
+            type="text"
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            placeholder="e.g. Discovered an old oak tree, legs felt fresh, cold breeze..."
+            maxLength={180}
+            className="w-full px-4 py-3 rounded-xl bg-[#15221b] border border-[#22362b] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500"
+          />
+        </div>
+
+        {/* Generate Reflection Button */}
+        {!reflectionData && (
+          <button
+            onClick={handleGenerateReflection}
+            disabled={isGeneratingReflection}
+            className="w-full py-3.5 rounded-2xl bg-[#16281e] hover:bg-[#1e3629] text-emerald-300 border border-emerald-700 font-bold text-sm flex items-center justify-center gap-2 transition-all cursor-pointer"
+          >
+            {isGeneratingReflection ? (
+              <>
+                <Loader2 className="w-4 h-4 animate-spin" />
+                <span>Consulting Gemma 3 Locally...</span>
+              </>
+            ) : (
+              <>
+                <Sparkles className="w-4 h-4 text-emerald-400" />
+                <span>Generate AI Post-Run Reflection</span>
+              </>
+            )}
+          </button>
+        )}
+      </div>
+
+      {/* AI Reflection Output Card */}
+      {reflectionData && (
+        <div className="p-6 rounded-3xl bg-gradient-to-br from-[#12281c] to-[#0e1d15] border border-emerald-600/70 shadow-xl space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-300 font-mono">
+                {reflectionData.mode === 'ai' ? 'Gemma 3 — Local AI Reflection' : 'Sample Run Reflection'}
+              </span>
+            </div>
+            <span className="text-[10px] font-mono text-zinc-400 px-2 py-0.5 rounded bg-zinc-900 border border-zinc-800">
+              100% On-Device
+            </span>
+          </div>
+
+          <p className="text-sm text-zinc-100 leading-relaxed font-medium">
+            "{reflectionData.reflection}"
+          </p>
+
+          {reflectionData.next_run && (
+            <div className="pt-2 text-xs text-emerald-300/90 border-t border-emerald-800/40">
+              <span className="font-semibold text-emerald-200">Coach suggestion: </span>
+              {reflectionData.next_run}
+            </div>
+          )}
+        </div>
+      )}
+
