@@ -57,3 +57,51 @@ This project strictly requires **zero paid services** to develop, run, or self-h
 
 ---
 
+## 🔒 Privacy-First Design
+
+Your location is sensitive. **RunRanger never permanently records or uploads your GPS track.**
+- GPS coordinates obtained from the browser Geolocation API are used in-memory for the current route session only.
+- The local SQLite database logs aggregate summary metrics only (distance, duration, activity, checkpoints completed, and personal notes).
+- No telemetry, no analytics, no third-party tracking scripts.
+- **Export Anytime**: Download your entire history in JSON or CSV with one click.
+- **Delete Anytime**: Purge all local data permanently with one click.
+
+---
+
+## 🚀 Quickstart Guide
+
+### Prerequisites
+- Python 3.10+
+- Node.js 18+ and npm
+- [Ollama](https://ollama.com) (for local AI mode; demo mode works without Ollama)
+
+### 1. Pull the Gemma 3 4B Model (Recommended)
+
+```bash
+ollama pull gemma3:4b
+ollama serve
+```
+
+### 2. Clone and Start in One Command
+
+```bash
+git clone https://github.com/your-username/runranger.git
+cd runranger
+
+# Starts both FastAPI and Vite with live reload
+./scripts/dev.sh
+```
+
+Open **`http://localhost:5173`** in your browser.
+
+---
+
+## 🎭 Dual Operating Modes
+
+RunRanger features an honest fallback architecture:
+
+| Mode | Trigger | Experience |
+|---|---|---|
+| **AI Mode** | Ollama running with `gemma3:4b` | Live, dynamic mission generation and personalized post-run reflections from local Gemma 3. |
+| **Demo Mode** | Ollama not installed or offline | Deterministic, offline sample missions loaded from `data/demo_missions.json`. Clearly labeled as Demo Mode — never pretends to be AI. |
+
