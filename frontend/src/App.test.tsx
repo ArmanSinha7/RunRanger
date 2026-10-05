@@ -102,3 +102,47 @@ describe('RunRanger Frontend Tests', () => {
                 },
               ],
             }),
+        });
+      }
+      if (url.includes('/api/runs')) {
+        if (opts?.method === 'POST') {
+          return Promise.resolve({
+            ok: true,
+            status: 201,
+            json: () =>
+              Promise.resolve({
+                id: 1,
+                created_at: new Date().toISOString(),
+                ...JSON.parse((opts?.body as string) || '{}'),
+              }),
+          });
+        }
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve([]),
+        });
+      }
+      if (url.includes('/api/missions')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(MOCK_MISSION_RESPONSE),
+        });
+      }
+      if (url.includes('/api/route')) {
+        return Promise.resolve({
+          ok: true,
+          json: () => Promise.resolve(MOCK_ROUTE_RESPONSE),
+        });
+      }
+      return Promise.reject(new Error(`Unhandled URL: ${url}`));
+    });
+  });
+
+  it('renders landing page with RunRanger title and Touch Grass badges', async () => {
+    render(<App />);
+    expect(screen.getAllByText(/RunRanger/i).length).toBeGreaterThan(0);
+    expect(screen.getByText(/Plan less\. Run more\./i)).toBeDefined();
+    expect(screen.getByRole('button', { name: /Start a Run/i })).toBeDefined();
+    expect(screen.getByText(/Local AI • Open Weight • Privacy First • Free/i)).toBeDefined();
+  });
+
