@@ -146,3 +146,64 @@ export const ActiveRunPage: React.FC<ActiveRunPageProps> = ({
             </span>
           </div>
 
+          <div className="space-y-1">
+            <h3 className="text-lg font-bold text-white">
+              {currentCp.title}
+            </h3>
+            <p className="text-sm text-zinc-200 leading-relaxed">
+              "{currentCp.instruction}"
+            </p>
+          </div>
+
+          <button
+            onClick={() => onToggleCheckpoint(currentCheckpointIndex)}
+            className={`w-full py-3 rounded-xl font-bold text-sm transition-all flex items-center justify-center gap-2 cursor-pointer ${
+              completedCheckpoints.includes(currentCheckpointIndex)
+                ? 'bg-emerald-950/80 border border-emerald-700 text-emerald-300'
+                : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-md shadow-emerald-950/40'
+            }`}
+          >
+            <CheckCircle2 className="w-4 h-4" />
+            <span>
+              {completedCheckpoints.includes(currentCheckpointIndex)
+                ? 'Observation Checked ✓'
+                : 'Mark Checkpoint Completed'}
+            </span>
+          </button>
+        </div>
+      )}
+
+      {/* Route & Road Map Toggle */}
+      {routeData && routeData.geometry.length > 0 && (
+        <div className="p-4 rounded-2xl bg-[#121c17] border border-[#24352d] space-y-3 shadow-lg">
+          <button
+            onClick={() => setShowRouteMap((prev) => !prev)}
+            className="w-full flex items-center justify-between text-left cursor-pointer group"
+          >
+            <div className="flex items-center gap-2.5">
+              <Compass className="w-4 h-4 text-emerald-400 group-hover:rotate-45 transition-transform" />
+              <div>
+                <span className="text-sm font-bold text-white block">
+                  {showRouteMap ? 'Hide Road Map' : 'View Street Route & Map'}
+                </span>
+                <span className="text-[11px] text-zinc-400 block">
+                  Road-snapped • Follows public sidewalks and designated paths
+                </span>
+              </div>
+            </div>
+            {showRouteMap ? (
+              <ChevronUp className="w-4 h-4 text-zinc-400" />
+            ) : (
+              <ChevronDown className="w-4 h-4 text-zinc-400" />
+            )}
+          </button>
+
+          {showRouteMap && (
+            <div className="space-y-3 pt-3 border-t border-[#203027]">
+              <MapView
+                geometry={routeData.geometry}
+                checkpoints={routeData.checkpoints}
+                missionCheckpoints={mission.checkpoints}
+                heightClass="h-64 sm:h-72"
+              />
+
