@@ -1,0 +1,20 @@
+services:
+  runranger:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: runranger
+    ports:
+      - "8000:8000"
+    environment:
+      - OLLAMA_URL=http://host.docker.internal:11434
+      - OLLAMA_MODEL=gemma3:4b
+      - RUNRANGER_DB=/app/data/runranger.db
+    volumes:
+      - runranger-data:/app/data
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: unless-stopped
+
+volumes:
+  runranger-data:
