@@ -126,3 +126,40 @@ export const MapView: React.FC<MapViewProps> = ({
       markersLayerRef.current.addLayer(startMarker);
     }
 
+    // Add Checkpoint markers placed strictly along the road geometry
+    if (markersLayerRef.current) {
+      checkpoints.forEach((coord, i) => {
+        const cpInfo = missionCheckpoints[i];
+        const title = cpInfo?.title || `Checkpoint ${i + 1}`;
+        const instr = cpInfo?.instruction || '';
+
+        const marker = L.marker(coord, {
+          icon: createCustomIcon(`${i + 1}`, '#d97706'),
+        }).bindPopup(`
+          <div style="font-family: inherit; min-width: 140px;">
+            <div style="font-weight: bold; color: #f59e0b; margin-bottom: 2px;">CP ${i + 1}: ${title}</div>
+            <div style="font-size: 12px; color: #d1d5db;">${instr}</div>
+            <div style="font-size: 10px; color: #10b981; margin-top: 4px;">✓ Located along public road/trail</div>
+          </div>
+        `);
+        markersLayerRef.current?.addLayer(marker);
+      });
+    }
+  }, [geometry, checkpoints, missionCheckpoints, startPoint]);
+
+  // Clean up on unmount
+  useEffect(() => {
+    return () => {
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
+    };
+  }, []);
+
+  return (
+    <div className={`w-full ${heightClass} relative rounded-xl overflow-hidden border border-[#24352d] shadow-inner`}>
+      <div ref={mapContainerRef} className="w-full h-full" />
+    </div>
+  );
+};
