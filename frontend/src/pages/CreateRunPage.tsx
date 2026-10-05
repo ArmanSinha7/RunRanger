@@ -274,3 +274,75 @@ export const CreateRunPage: React.FC<CreateRunPageProps> = ({
             <span className="text-[11px] text-zinc-500 font-normal">Gemma 3 tunes to this</span>
           </label>
 
+          <input
+            type="text"
+            value={mood}
+            onChange={(e) => setMood(e.target.value)}
+            placeholder="e.g. I want to clear my head, or I feel energetic..."
+            maxLength={180}
+            className="w-full px-4 py-3 rounded-xl bg-[#141e18] border border-[#22332a] text-sm text-white placeholder-zinc-500 focus:outline-none focus:border-emerald-500 transition-colors"
+          />
+
+          <div className="flex flex-wrap gap-1.5 pt-1">
+            {MOOD_SUGGESTIONS.map((sug, i) => (
+              <button
+                key={i}
+                type="button"
+                onClick={() => setMood(sug)}
+                className="text-[11px] px-2.5 py-1 rounded-full bg-[#18261f] border border-[#273d32] text-zinc-400 hover:text-emerald-300 hover:border-emerald-600 transition-colors cursor-pointer"
+              >
+                "{sug}"
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* AI Mode Selector Toggle */}
+        <div className="p-3.5 rounded-2xl bg-[#121c17] border border-[#22332a] flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-emerald-400" />
+            <div>
+              <span className="font-semibold text-zinc-200 block">
+                {preferDemo ? 'Sample Demo Missions' : 'Local AI (Gemma 3 4B)'}
+              </span>
+              <span className="text-[11px] text-zinc-400">
+                {preferDemo
+                  ? 'Fast, deterministic sample missions from local templates'
+                  : 'Gemma 3 running on your machine via Ollama'}
+              </span>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setPreferDemo(!preferDemo)}
+            className="text-xs font-semibold text-emerald-400 hover:text-emerald-300 cursor-pointer underline underline-offset-4"
+          >
+            Switch to {preferDemo ? 'AI Mode' : 'Demo Mode'}
+          </button>
+        </div>
+
+        {/* Submit CTA */}
+        <button
+          type="submit"
+          disabled={isLoading}
+          className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-bold text-base shadow-xl shadow-emerald-950/60 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isLoading ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin" />
+              <span>
+                {preferDemo ? 'Loading Sample Mission...' : 'Crafting Mission with Gemma 3...'}
+              </span>
+            </>
+          ) : (
+            <>
+              <Compass className="w-5 h-5" />
+              <span>Generate My Run</span>
+            </>
+          )}
+        </button>
+      </form>
+    </div>
+  );
+};
