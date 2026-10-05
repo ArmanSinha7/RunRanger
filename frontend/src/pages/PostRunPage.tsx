@@ -93,3 +93,108 @@ export const PostRunPage: React.FC<PostRunPageProps> = ({
         </p>
       </div>
 
+      {/* Metrics Card */}
+      <div className="p-6 rounded-3xl bg-[#121c17] border border-[#24352d] shadow-xl space-y-6">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+          <div className="p-3 rounded-2xl bg-[#16241d] border border-[#23382c]">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-400 block mb-0.5">
+              Duration
+            </span>
+            <span className="text-xl font-bold font-mono text-white">
+              {formatSeconds(elapsedSeconds)}
+            </span>
+          </div>
+
+          <div className="p-3 rounded-2xl bg-[#16241d] border border-[#23382c]">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-400 block mb-0.5">
+              Distance
+            </span>
+            <span className="text-xl font-bold font-mono text-emerald-400">
+              {formatDistance(distanceKm)}
+            </span>
+          </div>
+
+          <div className="p-3 rounded-2xl bg-[#16241d] border border-[#23382c]">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-400 block mb-0.5">
+              Avg Pace
+            </span>
+            <span className="text-xl font-bold font-mono text-teal-300">
+              {formatPace(elapsedSeconds, distanceKm)}
+            </span>
+          </div>
+
+          <div className="p-3 rounded-2xl bg-[#16241d] border border-[#23382c]">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-400 block mb-0.5">
+              Checkpoints
+            </span>
+            <span className="text-xl font-bold font-mono text-amber-400">
+              {doneCps} / {totalCps}
+            </span>
+          </div>
+        </div>
+
+        {/* Challenge Completion Highlight */}
+        <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-800/60 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <Trophy className="w-5 h-5 text-amber-400" />
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-emerald-300 block">
+                Outdoor Challenges Rating
+              </span>
+              <span className="text-sm font-semibold text-white">
+                {completionRate}% Completed
+              </span>
+            </div>
+          </div>
+          <span className="text-xs font-mono text-emerald-400">
+            {doneCps === totalCps ? 'Flawless Run 🌟' : 'Solid Effort 👍'}
+          </span>
+        </div>
+      </div>
+
+      {/* Route Map Summary */}
+      {routeData && routeData.geometry.length > 0 && (
+        <div className="p-5 sm:p-6 rounded-3xl bg-[#121c17] border border-[#24352d] space-y-3.5 shadow-xl">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Compass className="w-4 h-4 text-emerald-400" />
+              <h3 className="text-sm font-bold text-white uppercase tracking-wider">
+                Completed Pedestrian Route
+              </h3>
+            </div>
+            <span className="text-xs font-mono text-emerald-400 bg-emerald-950/80 px-2.5 py-0.5 rounded border border-emerald-800">
+              {formatDistance(routeData.distance_km)} Road Distance
+            </span>
+          </div>
+
+          <MapView
+            geometry={routeData.geometry}
+            checkpoints={routeData.checkpoints}
+            missionCheckpoints={mission.checkpoints}
+            heightClass="h-60 sm:h-72"
+          />
+
+          {routeData.streets && routeData.streets.length > 0 && (
+            <div className="p-3.5 rounded-xl bg-[#15241c] border border-emerald-800/50 text-xs space-y-1.5">
+              <span className="text-[10px] uppercase font-bold text-emerald-400 tracking-wider block">
+                Roads & Areas Explored
+              </span>
+              <p className="text-zinc-300 leading-relaxed font-medium">
+                {routeData.streets.join(' → ')}
+              </p>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Feeling & Feedback Form */}
+      <div className="p-6 rounded-3xl bg-[#121c17] border border-[#24352d] space-y-5">
+        <div className="space-y-1">
+          <h3 className="text-base font-bold text-white">
+            How did that feel?
+          </h3>
+          <p className="text-xs text-zinc-400">
+            Tell Gemma 3 how your body and mind felt during the run.
+          </p>
+        </div>
+
