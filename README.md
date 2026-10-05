@@ -105,3 +105,38 @@ RunRanger features an honest fallback architecture:
 | **AI Mode** | Ollama running with `gemma3:4b` | Live, dynamic mission generation and personalized post-run reflections from local Gemma 3. |
 | **Demo Mode** | Ollama not installed or offline | Deterministic, offline sample missions loaded from `data/demo_missions.json`. Clearly labeled as Demo Mode — never pretends to be AI. |
 
+---
+
+## 🧪 Testing
+
+RunRanger includes full test suites for both backend and frontend:
+
+```bash
+# Run all tests (pytest + vitest + build check)
+./scripts/test.sh
+```
+
+Or run individually:
+```bash
+# Backend pytest suite (15 tests)
+cd backend && source .venv/bin/activate && pytest -v
+
+# Frontend vitest suite (4 tests)
+cd frontend && npm test
+```
+
+---
+
+## 🐳 Docker Setup
+
+RunRanger provides an easy Docker deployment that connects to Ollama on your host machine (preserving native Apple Silicon / GPU acceleration):
+
+```bash
+docker compose up --build
+```
+Open **`http://localhost:8000`**.
+
+---
+
+## 📂 Project Structure
+
