@@ -241,3 +241,65 @@ export default function App() {
       {/* Dynamic Health / Status Banner */}
       <HealthBanner health={health} />
 
+      {/* Main View Router */}
+      <main className="flex-1 w-full pb-16">
+        {tab === 'landing' && (
+          <LandingPage
+            onStart={() => setTab('create')}
+            onHowItWorks={() => setShowHowItWorks(true)}
+            health={health}
+          />
+        )}
+
+        {tab === 'create' && (
+          <CreateRunPage
+            onGenerate={handleGenerateMission}
+            isLoading={isGeneratingMission}
+            health={health}
+          />
+        )}
+
+        {tab === 'mission' && missionData && (
+          <MissionPage
+            missionData={missionData}
+            routeData={routeData}
+            onLockAndStart={handleLockAndStart}
+            onBack={() => setTab('create')}
+            isLoadingRoute={isLoadingRoute}
+            onRefreshRoute={(prov) => loadRouteForMission(missionData, prov)}
+          />
+        )}
+
+        {tab === 'active' && missionData && (
+          <ActiveRunPage
+            missionData={missionData}
+            routeData={routeData}
+            status={tracker.status}
+            elapsedSeconds={tracker.elapsedSeconds}
+            distanceKm={tracker.distanceKm}
+            completedCheckpoints={tracker.completedCheckpoints}
+            currentCheckpointIndex={tracker.currentCheckpointIndex}
+            isSimulatedSpeed={tracker.isSimulatedSpeed}
+            onPause={tracker.pauseRun}
+            onResume={tracker.resumeRun}
+            onFinish={handleFinishRun}
+            onToggleCheckpoint={tracker.toggleCheckpoint}
+            onToggleSimSpeed={tracker.toggleSimulatedSpeed}
+            onShowFocus={() => setShowFocusOverlay(true)}
+          />
+        )}
+
+        {tab === 'post' && missionData && (
+          <PostRunPage
+            missionData={missionData}
+            routeData={routeData}
+            elapsedSeconds={tracker.elapsedSeconds}
+            distanceKm={tracker.distanceKm}
+            completedCheckpoints={tracker.completedCheckpoints}
+            onSaveRun={handleSaveRun}
+            onGenerateReflection={handleGenerateReflection}
+            onGoToDashboard={() => setTab('dashboard')}
+            onNewRun={() => setTab('create')}
+          />
+        )}
+
