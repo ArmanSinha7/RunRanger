@@ -251,3 +251,34 @@ export const ActiveRunPage: React.FC<ActiveRunPageProps> = ({
         </div>
       </div>
 
+      {/* Action Controls: Pause / Resume / Finish */}
+      <div className="grid grid-cols-2 gap-3 pt-2">
+        {status === 'running' ? (
+          <button
+            onClick={onPause}
+            className="py-4 rounded-2xl bg-zinc-800 hover:bg-zinc-700 text-zinc-100 font-bold text-base flex items-center justify-center gap-2 transition-all cursor-pointer"
+          >
+            <Pause className="w-5 h-5" />
+            <span>Pause Run</span>
+          </button>
+        ) : (
+          <button
+            onClick={onResume}
+            className="py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-500 text-white font-bold text-base flex items-center justify-center gap-2 transition-all cursor-pointer"
+          >
+            <Play className="w-5 h-5 fill-white" />
+            <span>Resume</span>
+          </button>
+        )}
+
+        <button
+          onClick={onFinish}
+          className="py-4 rounded-2xl bg-gradient-to-r from-teal-700 to-emerald-800 hover:from-teal-600 hover:to-emerald-700 text-white font-bold text-base flex items-center justify-center gap-2 shadow-lg shadow-teal-950/60 transition-all cursor-pointer"
+        >
+          <Flag className="w-5 h-5 text-teal-200" />
+          <span>Finish Run 🎉</span>
+        </button>
+      </div>
+    </div>
+  );
+};
