@@ -140,3 +140,38 @@ Open **`http://localhost:8000`**.
 
 ## 📂 Project Structure
 
+```
+runranger/
+├── frontend/                     # React 19 + TypeScript + Vite + Tailwind v4
+│   ├── src/
+│   │   ├── components/           # Navbar, MapView, CheckpointCard, FocusOverlay, etc.
+│   │   ├── pages/                # LandingPage, CreateRunPage, MissionPage, ActiveRun, PostRun, Dashboard
+│   │   ├── hooks/                # useGeolocation, useRunTracker
+│   │   ├── services/             # API client, storage
+│   │   ├── types/                # Mission, Run, Health, Stats definitions
+│   │   └── utils/                # Formatters, sound & haptic helpers
+│   └── package.json
+├── backend/                      # FastAPI Python Application
+│   ├── app/
+│   │   ├── ai/                   # Ollama client, safety parsing, prompts
+│   │   ├── routes/               # API endpoints (/missions, /route, /runs, /stats, etc.)
+│   │   ├── schemas/              # Pydantic models with validation guardrails
+│   │   ├── services/             # Mission service, reflection, routing, repository
+│   │   ├── data/                 # Deterministic demo mission templates
+│   │   ├── config.py             # Zero-cost local runtime configuration
+│   │   ├── db.py                 # Lightweight SQLite layer
+│   │   └── main.py               # FastAPI entrypoint & static bundle mounting
+│   ├── tests/                    # 15 comprehensive pytest tests
+│   └── requirements.txt
+├── data/                         # Local SQLite database directory (.gitignore excluded)
+├── docs/                         # Architecture, Zero-Cost Audit, Hacktoberfest Guide
+├── scripts/                      # ./scripts/dev.sh, ./scripts/start.sh, ./scripts/test.sh
+├── docker-compose.yml
+├── Dockerfile
+├── LICENSE                       # MIT License
+├── CONTRIBUTING.md
+├── CODE_OF_CONDUCT.md
+├── SECURITY.md
+└── README.md
+```
+
