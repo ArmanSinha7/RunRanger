@@ -79,3 +79,75 @@ export const LandingPage: React.FC<LandingPageProps> = ({ onStart, onHowItWorks 
           </p>
         </div>
 
+        <div className="p-5 rounded-2xl bg-[#121c17] border border-[#24352d] space-y-2 hover:border-emerald-700/60 transition-colors">
+          <div className="w-10 h-10 rounded-xl bg-amber-950 border border-amber-800 flex items-center justify-center text-amber-400 mb-3">
+            <Lock className="w-5 h-5" />
+          </div>
+          <h3 className="font-bold text-white text-base">3. Put phone away</h3>
+          <p className="text-xs text-zinc-400 leading-relaxed">
+            Hit Lock & Start. Pocket your screen. Run with your head up and senses alive.
+          </p>
+        </div>
+
+        <div className="p-5 rounded-2xl bg-[#121c17] border border-[#24352d] space-y-2 hover:border-emerald-700/60 transition-colors">
+          <div className="w-10 h-10 rounded-xl bg-emerald-950 border border-emerald-800 flex items-center justify-center text-emerald-400 mb-3">
+            <Trees className="w-5 h-5" />
+          </div>
+          <h3 className="font-bold text-white text-base">4. Touch grass</h3>
+          <p className="text-xs text-zinc-400 leading-relaxed">
+            Return refreshed. Save your local progress and get a concise on-device reflection.
+          </p>
+        </div>
+      </div>
+
+      {/* Touch Grass Theme Banner */}
+      <div className="p-6 sm:p-8 rounded-3xl bg-gradient-to-br from-[#14261d] to-[#0f1a14] border border-[#284234] shadow-xl space-y-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 font-mono">
+              Hacktoberfest 2026 Open-Source AI Challenge
+            </span>
+            <h2 className="text-2xl font-bold text-white">
+              “What if an AI assistant's job was to make itself unnecessary?”
+            </h2>
+          </div>
+          <div className="shrink-0">
+            <div className="px-3.5 py-1.5 rounded-xl bg-emerald-950 border border-emerald-700/60 text-xs font-semibold text-emerald-300">
+              Week 1: Touch Grass
+            </div>
+          </div>
+        </div>
+
+        <p className="text-sm text-zinc-300 leading-relaxed">
+          RunRanger uses open-weight AI locally because the app is designed for outdoor environments, where connectivity may be unreliable and runners should never need to send personal activity or location data to commercial cloud AI providers.
+        </p>
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 text-xs">
+          <div className="flex items-center gap-2 text-zinc-300">
+            <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>Zero paid APIs or cloud databases</span>
+          </div>
+          <div className="flex items-center gap-2 text-zinc-300">
+            <Cpu className="w-4 h-4 text-teal-400 shrink-0" />
+            <span>Local Gemma 3 4B via Ollama</span>
+          </div>
+          <div className="flex items-center gap-2 text-zinc-300">
+            <MapPin className="w-4 h-4 text-emerald-400 shrink-0" />
+            <span>OpenStreetMap & OSRM routing</span>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Start Card */}
+      <div className="text-center pt-2">
+        <button
+          onClick={onStart}
+          className="inline-flex items-center gap-2 text-sm font-semibold text-emerald-400 hover:text-emerald-300 transition-colors cursor-pointer"
+        >
+          <span>Ready to lace up? Generate your first mission</span>
+          <ArrowRight className="w-4 h-4" />
+        </button>
+      </div>
+    </div>
+  );
+};
