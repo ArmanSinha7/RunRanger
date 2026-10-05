@@ -80,3 +80,92 @@ export default function App() {
           (c) => c.at_minute / Math.max(mission.request.duration_min, 1)
         );
 
+        const route = await fetchRoute({
+          lat: geo.lat,
+          lng: geo.lng,
+          distance_km: mission.mission.estimated_distance_km,
+          style: mission.mission.route_style,
+          seed: `${mission.mission.title}-${Date.now()}`,
+          checkpoint_fractions: fractions,
+          provider,
+        });
+        setRouteData(route);
+      } catch (err) {
+        console.warn('Route computation warning:', err);
+        // Fallback simple geometric coordinates if API unreachable
+        const offset = 0.005;
+        setRouteData({
+          provider: 'local',
+          geometry: [
+            [geo.lat, geo.lng],
+            [geo.lat + offset, geo.lng + offset],
+            [geo.lat + offset, geo.lng - offset],
+            [geo.lat, geo.lng],
+          ],
+          checkpoints: mission.mission.checkpoints.map((_, i) => [
+            geo.lat + (i + 1) * 0.002,
+            geo.lng + (i + 1) * 0.002,
+          ]),
+          distance_km: mission.mission.estimated_distance_km,
+          notice: 'Computed using offline local geometric circle.',
+        });
+      } finally {
+        setIsLoadingRoute(false);
+      }
+    },
+    [geo.lat, geo.lng]
+  );
+
+  // Handle Mission Creation
+  const handleGenerateMission = async (req: MissionRequest) => {
+    setIsGeneratingMission(true);
+    try {
+      const resp = await createMission(req);
+      setMissionData(resp);
+      saveLastMission(resp);
+      setTab('mission');
+      await loadRouteForMission(resp, 'osrm');
+    } catch (err) {
+      console.error('Failed to create mission:', err);
+      alert('Could not generate mission. Running in offline demo mode.');
+    } finally {
+      setIsGeneratingMission(false);
+    }
+  };
+
+  // Start Run Flow
+  const handleLockAndStart = () => {
+    tracker.startRun();
+    setShowFocusOverlay(true);
+    setTab('active');
+  };
+
+  // Finish Run Flow
+  const handleFinishRun = () => {
+    tracker.finishRun();
+    setTab('post');
+  };
+
+  // Post Run Save
+  const handleSaveRun = async (feeling: Feeling, note: string, reflection: string) => {
+    if (!missionData) return;
+    try {
+      const saved = await saveRun({
+        mission_title: missionData.mission.title,
+        activity: missionData.request.activity,
+        difficulty: missionData.mission.difficulty,
+        goal: missionData.request.goal,
+        environment: missionData.request.environment,
+        planned_minutes: missionData.request.duration_min,
+        duration_sec: tracker.elapsedSeconds,
+        distance_km: tracker.distanceKm,
+        checkpoints_total: missionData.mission.checkpoints.length,
+        checkpoints_done: tracker.completedCheckpoints.length,
+        finished_early: tracker.elapsedSeconds < (missionData.request.duration_min * 60) / 2,
+        feeling,
+        note,
+        reflection,
+        mode: missionData.mode,
+        mission: missionData.mission as unknown as Record<string, unknown>,
+      });
+
