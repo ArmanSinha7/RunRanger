@@ -137,3 +137,68 @@ export const MissionPage: React.FC<MissionPageProps> = ({
             </h2>
           </div>
 
+          <div className="flex items-center gap-1.5 text-xs">
+            <button
+              onClick={() => handleProviderChange('osrm')}
+              className={`px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-colors ${
+                activeProvider === 'osrm'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-950'
+                  : 'bg-zinc-800 text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              🛣️ Road Snapped (OSRM)
+            </button>
+            <button
+              onClick={() => handleProviderChange('local')}
+              className={`px-3 py-1 rounded-lg text-xs font-semibold cursor-pointer transition-colors ${
+                activeProvider === 'local'
+                  ? 'bg-emerald-600 text-white shadow-md shadow-emerald-950'
+                  : 'bg-zinc-800 text-zinc-400 hover:text-zinc-200'
+              }`}
+            >
+              Offline Grid
+            </button>
+          </div>
+        </div>
+
+        {/* Map View */}
+        <MapView
+          geometry={routeData?.geometry || []}
+          checkpoints={routeData?.checkpoints || []}
+          missionCheckpoints={mission.checkpoints}
+        />
+
+        {/* Street & Path Breakdown Card */}
+        {routeData?.streets && routeData.streets.length > 0 && (
+          <div className="p-3.5 rounded-xl bg-[#14231b] border border-emerald-800/60 text-xs space-y-1.5">
+            <div className="flex items-center justify-between text-emerald-300 font-semibold">
+              <span className="flex items-center gap-1.5">
+                <Navigation className="w-3.5 h-3.5" />
+                Streets & Designated Pedestrian Paths
+              </span>
+              <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded bg-emerald-950 text-emerald-400 border border-emerald-800">
+                Road-Snapped • Avoids Buildings
+              </span>
+            </div>
+            <div className="text-zinc-200 flex flex-wrap items-center gap-1.5 leading-relaxed pt-1">
+              {routeData.streets.map((st, i) => (
+                <React.Fragment key={i}>
+                  <span className="px-2 py-0.5 rounded bg-zinc-800/80 font-medium text-emerald-200 border border-zinc-700/80">
+                    {st}
+                  </span>
+                  {i < routeData.streets!.length - 1 && (
+                    <span className="text-zinc-500 font-bold">→</span>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {routeData?.notice && (
+          <p className="text-[11px] text-zinc-500 font-mono text-center">
+            {routeData.notice}
+          </p>
+        )}
+      </div>
+
