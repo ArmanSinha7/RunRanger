@@ -178,3 +178,75 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
                     )}
                   </div>
 
+                  <div className="flex flex-wrap items-center gap-3 text-xs text-zinc-400">
+                    <span>{formatDate(r.created_at)}</span>
+                    <span>•</span>
+                    <span className="font-mono text-emerald-300 font-semibold">
+                      {formatDistance(r.distance_km)}
+                    </span>
+                    <span>•</span>
+                    <span className="font-mono text-zinc-300">
+                      {formatDurationLong(r.duration_sec)}
+                    </span>
+                    <span>•</span>
+                    <span>
+                      {r.checkpoints_done}/{r.checkpoints_total} Checkpoints
+                    </span>
+                  </div>
+
+                  {r.reflection && (
+                    <p className="text-xs text-zinc-300 italic pt-1 border-t border-[#1b2b22] line-clamp-2">
+                      "{r.reflection}"
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex items-center gap-2 self-end sm:self-center shrink-0">
+                  <button
+                    onClick={() => onDeleteRun(r.id)}
+                    className="p-2 text-zinc-500 hover:text-red-400 rounded-lg hover:bg-zinc-800/60 transition-colors cursor-pointer"
+                    title="Delete this run"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Privacy Guarantee & Local Data Management */}
+      <div className="p-6 rounded-3xl bg-[#101713] border border-[#203328] space-y-4">
+        <div className="flex items-start gap-3">
+          <ShieldCheck className="w-6 h-6 text-emerald-400 shrink-0 mt-0.5" />
+          <div className="space-y-1">
+            <h3 className="text-sm font-bold text-white">
+              Device-Only Data Policy
+            </h3>
+            <p className="text-xs text-zinc-300 leading-relaxed">
+              Your activity and location data stay on your device unless you explicitly choose to export them. RunRanger requires no accounts, uses no telemetry, and tracks no external identifiers.
+            </p>
+          </div>
+        </div>
+
+        {/* Data Actions */}
+        <div className="flex flex-wrap items-center gap-3 pt-2">
+          <a
+            href={getExportUrl('json')}
+            download="runranger-data.json"
+            className="px-4 py-2 rounded-xl bg-[#16241d] hover:bg-[#1e3428] text-emerald-300 border border-emerald-800/80 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Export Data (JSON)</span>
+          </a>
+
+          <a
+            href={getExportUrl('csv')}
+            download="runranger-data.csv"
+            className="px-4 py-2 rounded-xl bg-[#16241d] hover:bg-[#1e3428] text-teal-300 border border-teal-800/80 text-xs font-semibold flex items-center gap-1.5 transition-colors cursor-pointer"
+          >
+            <Download className="w-3.5 h-3.5" />
+            <span>Export Data (CSV)</span>
+          </a>
+
