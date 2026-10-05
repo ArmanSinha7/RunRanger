@@ -282,3 +282,49 @@ export const PostRunPage: React.FC<PostRunPageProps> = ({
         </div>
       )}
 
+      {/* Save Run Action */}
+      <div className="space-y-3">
+        {!isSaved ? (
+          <button
+            onClick={handleSave}
+            disabled={isSaving}
+            className="w-full py-4 rounded-2xl bg-gradient-to-r from-emerald-600 to-teal-700 hover:from-emerald-500 hover:to-teal-600 text-white font-bold text-base shadow-xl shadow-emerald-950/60 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+          >
+            {isSaving ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin" />
+                <span>Saving to local SQLite...</span>
+              </>
+            ) : (
+              <>
+                <Save className="w-5 h-5" />
+                <span>Save Run to Local Device</span>
+              </>
+            )}
+          </button>
+        ) : (
+          <div className="p-3.5 rounded-2xl bg-emerald-950/80 border border-emerald-600 text-center text-xs font-bold text-emerald-300 flex items-center justify-center gap-2">
+            <CheckCircle2 className="w-4 h-4" />
+            <span>Saved to your local SQLite database!</span>
+          </div>
+        )}
+
+        <div className="grid grid-cols-2 gap-3">
+          <button
+            onClick={onGoToDashboard}
+            className="py-3 rounded-xl bg-[#141e18] hover:bg-[#1a2820] text-zinc-200 border border-[#24352d] font-semibold text-sm transition-colors cursor-pointer"
+          >
+            View Dashboard
+          </button>
+
+          <button
+            onClick={onNewRun}
+            className="py-3 rounded-xl bg-[#141e18] hover:bg-[#1a2820] text-emerald-400 border border-emerald-800/60 font-semibold text-sm transition-colors cursor-pointer"
+          >
+            Start Another Run
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
