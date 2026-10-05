@@ -195,3 +195,82 @@ export const CreateRunPage: React.FC<CreateRunPageProps> = ({
           </div>
         </div>
 
+        {/* 3. Difficulty */}
+        <div className="space-y-2.5">
+          <label className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+            3. Intensity Level
+          </label>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            {DIFFICULTIES.map((diff) => (
+              <button
+                key={diff.id}
+                type="button"
+                onClick={() => setDifficulty(diff.id)}
+                className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                  difficulty === diff.id
+                    ? 'bg-emerald-950/70 border-emerald-500 text-white shadow-lg shadow-emerald-950/50'
+                    : 'bg-[#141e18] border-[#22332a] text-zinc-400 hover:text-zinc-200 hover:bg-[#1a2821]'
+                }`}
+              >
+                <span className="font-bold text-sm block mb-0.5">{diff.label}</span>
+                <span className="text-[11px] text-zinc-400 block leading-tight">{diff.desc}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 4. Goal */}
+        <div className="space-y-2.5">
+          <label className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+            4. Mission Focus
+          </label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+            {GOALS.map((g) => (
+              <button
+                key={g.id}
+                type="button"
+                onClick={() => setGoal(g.id)}
+                className={`py-2.5 px-3 rounded-xl border text-left flex items-center gap-2 transition-all cursor-pointer ${
+                  goal === g.id
+                    ? 'bg-emerald-950/70 border-emerald-500 text-emerald-300'
+                    : 'bg-[#141e18] border-[#22332a] text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                <span>{g.icon}</span>
+                <span className="text-xs sm:text-sm font-semibold">{g.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 5. Environment */}
+        <div className="space-y-2.5">
+          <label className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+            5. Terrain / Environment
+          </label>
+          <div className="grid grid-cols-3 sm:grid-cols-5 gap-2">
+            {ENVIRONMENTS.map((env) => (
+              <button
+                key={env.id}
+                type="button"
+                onClick={() => setEnvironment(env.id)}
+                className={`py-2 px-2.5 rounded-xl border text-center transition-all cursor-pointer flex flex-col items-center gap-0.5 ${
+                  environment === env.id
+                    ? 'bg-emerald-950/70 border-emerald-500 text-emerald-300'
+                    : 'bg-[#141e18] border-[#22332a] text-zinc-400 hover:text-zinc-200'
+                }`}
+              >
+                <span className="text-lg">{env.icon}</span>
+                <span className="text-[11px] font-semibold">{env.label}</span>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 6. Mood / Feeling Prompt */}
+        <div className="space-y-2.5">
+          <label className="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center justify-between">
+            <span>6. What are you feeling today? (Optional)</span>
+            <span className="text-[11px] text-zinc-500 font-normal">Gemma 3 tunes to this</span>
+          </label>
+
