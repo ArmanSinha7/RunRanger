@@ -207,3 +207,47 @@ export const ActiveRunPage: React.FC<ActiveRunPageProps> = ({
                 heightClass="h-64 sm:h-72"
               />
 
+              {routeData.streets && routeData.streets.length > 0 && (
+                <div className="p-3 rounded-xl bg-[#16271e] border border-emerald-800/60 text-xs space-y-1">
+                  <span className="text-[11px] font-semibold text-emerald-300 block">
+                    Streets & Pathways Sequence:
+                  </span>
+                  <div className="text-zinc-200 flex flex-wrap items-center gap-1.5 leading-relaxed">
+                    {routeData.streets.map((st, i) => (
+                      <React.Fragment key={i}>
+                        <span className="px-2 py-0.5 rounded bg-zinc-800/80 font-medium text-emerald-200 border border-zinc-700/80">
+                          {st}
+                        </span>
+                        {i < routeData.streets!.length - 1 && (
+                          <span className="text-zinc-500 font-bold">→</span>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Checkpoints Overview List */}
+      <div className="space-y-3">
+        <h4 className="text-xs font-bold uppercase tracking-wider text-zinc-400">
+          All Mission Checkpoints (Tap to check)
+        </h4>
+        <div className="space-y-2">
+          {mission.checkpoints.map((cp, idx) => (
+            <CheckpointCard
+              key={idx}
+              checkpoint={cp}
+              index={idx}
+              completed={completedCheckpoints.includes(idx)}
+              interactive={true}
+              onToggle={onToggleCheckpoint}
+              isActive={idx === currentCheckpointIndex}
+            />
+          ))}
+        </div>
+      </div>
+
