@@ -146,3 +146,43 @@ describe('RunRanger Frontend Tests', () => {
     expect(screen.getByText(/Local AI • Open Weight • Privacy First • Free/i)).toBeDefined();
   });
 
+  it('displays the 4 key steps to get user off their phone', async () => {
+    render(<App />);
+    expect(screen.getByText(/1\. Pick your run/i)).toBeDefined();
+    expect(screen.getByText(/2\. Get your mission/i)).toBeDefined();
+    expect(screen.getByText(/3\. Put phone away/i)).toBeDefined();
+    expect(screen.getByText(/4\. Touch grass/i)).toBeDefined();
+  });
+
+  it('transitions to Create Run page when Start a Run is clicked', async () => {
+    render(<App />);
+    const startBtn = screen.getByRole('button', { name: /Start a Run/i });
+    fireEvent.click(startBtn);
+
+    await waitFor(() => {
+      expect(screen.getByText(/Create Your Mission/i)).toBeDefined();
+      expect(screen.getByText(/1\. Activity/i)).toBeDefined();
+      expect(screen.getByText(/2\. Target Duration/i)).toBeDefined();
+      expect(screen.getByText(/Generate My Run/i)).toBeDefined();
+    });
+  });
+
+  it('generates a mission and shows the mission screen with checkpoints and Lock & Start CTA', async () => {
+    render(<App />);
+    // Navigate to create page
+    fireEvent.click(screen.getByRole('button', { name: /Start a Run/i }));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Generate My Run/i)).toBeDefined();
+    });
+
+    // Click Generate Run
+    fireEvent.click(screen.getByText(/Generate My Run/i));
+
+    await waitFor(() => {
+      expect(screen.getByText(/Autumn Meadow Sprint/i)).toBeDefined();
+      expect(screen.getByText(/Ancient Pine/i)).toBeDefined();
+      expect(screen.getByText(/LOCK PHONE & START/i)).toBeDefined();
+    });
+  });
+});
