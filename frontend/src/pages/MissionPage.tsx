@@ -75,3 +75,65 @@ export const MissionPage: React.FC<MissionPageProps> = ({
           {mission.summary}
         </p>
 
+        {/* Quick Stats Grid */}
+        <div className="grid grid-cols-3 gap-2.5 pt-2">
+          <div className="p-3 rounded-xl bg-[#141e18] border border-[#22332a]">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-400 block mb-0.5">
+              Duration
+            </span>
+            <span className="text-lg font-bold text-white font-mono">
+              ~{missionData.request.duration_min} min
+            </span>
+          </div>
+
+          <div className="p-3 rounded-xl bg-[#141e18] border border-[#22332a]">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-400 block mb-0.5">
+              Road Distance
+            </span>
+            <span className="text-lg font-bold text-emerald-400 font-mono">
+              {formatDistance(routeData?.distance_km ?? mission.estimated_distance_km)}
+            </span>
+          </div>
+
+          <div className="p-3 rounded-xl bg-[#141e18] border border-[#22332a]">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-400 block mb-0.5">
+              Intensity
+            </span>
+            <span className="text-lg font-bold text-teal-300 capitalize">
+              {mission.difficulty}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Pre-Run Coach Tip */}
+      <div className="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-800/60 flex items-start gap-3">
+        <Sparkles className="w-5 h-5 text-emerald-400 shrink-0 mt-0.5" />
+        <div>
+          <span className="text-xs font-bold uppercase tracking-wider text-emerald-400 block mb-0.5">
+            Pre-Run Field Advice
+          </span>
+          <p className="text-xs sm:text-sm text-zinc-300 leading-relaxed">
+            {mission.pre_run_tip}
+          </p>
+        </div>
+      </div>
+
+      {/* Warmup Guidance */}
+      <div className="p-3.5 rounded-xl bg-[#141e18] border border-[#22332a] flex items-center justify-between text-xs sm:text-sm">
+        <div className="flex items-center gap-2 text-zinc-300">
+          <span className="font-bold text-emerald-400 uppercase text-xs">Warmup:</span>
+          <span>{mission.warmup}</span>
+        </div>
+      </div>
+
+      {/* Route & Interactive Map */}
+      <div className="space-y-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Compass className="w-4 h-4 text-emerald-400" />
+            <h2 className="text-base font-bold text-white uppercase tracking-wider">
+              Pedestrian Route & Map
+            </h2>
+          </div>
+
