@@ -169,3 +169,75 @@ export default function App() {
         mission: missionData.mission as unknown as Record<string, unknown>,
       });
 
+      // Update runs list
+      setRuns((prev) => [saved, ...prev]);
+
+      // Refresh stats
+      const newStats = await fetchStats();
+      setStats(newStats);
+    } catch (err) {
+      console.error('Failed to save run:', err);
+    }
+  };
+
+  // Generate Reflection
+  const handleGenerateReflection = async (
+    feeling: Feeling,
+    note: string
+  ): Promise<ReflectionResponse> => {
+    if (!missionData) throw new Error('No mission data');
+    const completedTitles = missionData.mission.checkpoints
+      .filter((_, i) => tracker.completedCheckpoints.includes(i))
+      .map((c) => c.title);
+
+    return fetchReflection({
+      mission_title: missionData.mission.title,
+      activity: missionData.request.activity,
+      planned_minutes: missionData.request.duration_min,
+      duration_sec: tracker.elapsedSeconds,
+      distance_km: tracker.distanceKm,
+      checkpoints_total: missionData.mission.checkpoints.length,
+      checkpoints_done: tracker.completedCheckpoints.length,
+      completed_challenges: completedTitles,
+      feeling,
+      note,
+      finished_early: tracker.elapsedSeconds < (missionData.request.duration_min * 60) / 2,
+    });
+  };
+
+  // Delete Handlers
+  const handleDeleteRun = async (id: number) => {
+    try {
+      await deleteRun(id);
+      setRuns((prev) => prev.filter((r) => r.id !== id));
+      const newStats = await fetchStats();
+      setStats(newStats);
+    } catch (err) {
+      console.error('Failed to delete run:', err);
+    }
+  };
+
+  const handleDeleteAll = async () => {
+    try {
+      await deleteAllRuns();
+      setRuns([]);
+      const newStats = await fetchStats();
+      setStats(newStats);
+    } catch (err) {
+      console.error('Failed to delete all runs:', err);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-[#0d1310] text-[#f1f5f3] flex flex-col font-sans selection:bg-emerald-900 selection:text-emerald-200">
+      {/* Top Navbar */}
+      <Navbar
+        currentTab={tab}
+        setTab={(t) => setTab(t)}
+        health={health}
+        onOpenHowItWorks={() => setShowHowItWorks(true)}
+      />
+
+      {/* Dynamic Health / Status Banner */}
+      <HealthBanner health={health} />
+
