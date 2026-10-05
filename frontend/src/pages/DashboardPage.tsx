@@ -89,3 +89,92 @@ export const DashboardPage: React.FC<DashboardPageProps> = ({
             </span>
           </div>
 
+          <div className="p-4 rounded-2xl bg-[#121c17] border border-[#24352d]">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-400 block mb-1">
+              Challenges
+            </span>
+            <span className="text-2xl font-bold font-mono text-amber-400">
+              {stats?.challenges_completed ?? 0}
+            </span>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-[#121c17] border border-[#24352d]">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-400 block mb-1">
+              Streak
+            </span>
+            <div className="flex items-center gap-1.5">
+              <Flame className="w-5 h-5 text-orange-500" />
+              <span className="text-2xl font-bold font-mono text-orange-400">
+                {stats?.current_streak_days ?? 0}d
+              </span>
+            </div>
+          </div>
+
+          <div className="p-4 rounded-2xl bg-[#121c17] border border-[#24352d]">
+            <span className="text-[11px] uppercase tracking-wider text-zinc-400 block mb-1">
+              Longest Run
+            </span>
+            <span className="text-2xl font-bold font-mono text-white">
+              {formatDistance(stats?.longest_run_km ?? 0)}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      {/* Badges / Milestones */}
+      {stats?.badges && stats.badges.length > 0 && (
+        <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+              Outdoor Milestones & Badges
+            </h2>
+            <span className="text-xs text-zinc-400">
+              {stats.badges.filter((b) => b.earned).length} of {stats.badges.length} unlocked
+            </span>
+          </div>
+
+          <BadgeList badges={stats.badges} />
+        </div>
+      )}
+
+      {/* Recent Missions Log */}
+      <div className="space-y-4">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+          Recent Outdoor Missions ({runs.length})
+        </h2>
+
+        {runs.length === 0 ? (
+          <div className="p-8 rounded-2xl bg-[#121c17] border border-[#24352d] text-center space-y-3">
+            <span className="text-4xl block">🌱</span>
+            <p className="text-sm text-zinc-300 font-medium">
+              No logged missions yet. Lace up and take your first step!
+            </p>
+            <button
+              onClick={onNewRun}
+              className="px-4 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs cursor-pointer"
+            >
+              Start Mission #1
+            </button>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {runs.map((r) => (
+              <div
+                key={r.id}
+                className="p-4 sm:p-5 rounded-2xl bg-[#121c17] border border-[#24352d] hover:border-emerald-800/60 transition-colors flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+              >
+                <div className="space-y-1.5">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <span className="font-bold text-white text-base">
+                      {r.mission_title}
+                    </span>
+                    <span className="text-[11px] font-mono px-2 py-0.5 rounded bg-zinc-800 text-zinc-300 border border-zinc-700 capitalize">
+                      {r.activity} • {r.difficulty}
+                    </span>
+                    {r.feeling && (
+                      <span className="text-xs px-2 py-0.5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800">
+                        {r.feeling}
+                      </span>
+                    )}
+                  </div>
+
