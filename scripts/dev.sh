@@ -27,3 +27,26 @@ if [ ! -d "node_modules" ]; then
   npm install
 fi
 
+echo "🚀 Starting FastAPI on http://localhost:8000 and Vite on http://localhost:5173..."
+echo "💡 Tip: Start Ollama in another terminal with 'ollama serve' to activate local Gemma 3 AI."
+
+# Run both backend and frontend concurrently
+cd "$ROOT_DIR/backend"
+uvicorn app.main:app --reload --port 8000 &
+BACKEND_PID=$!
+
+cd "$ROOT_DIR/frontend"
+npm run dev &
+FRONTEND_PID=$!
+
+# Trap SIGINT and SIGTERM to kill background processes cleanly
+cleanup() {
+  echo ""
+  echo "🛑 Stopping RunRanger development servers..."
+  kill $BACKEND_PID 2>/dev/null || true
+  kill $FRONTEND_PID 2>/dev/null || true
+  exit 0
+}
+trap cleanup SIGINT SIGTERM
+
+wait
