@@ -59,3 +59,46 @@ const MOCK_ROUTE_RESPONSE = {
   notice: 'Local loop computed.',
 };
 
+describe('RunRanger Frontend Tests', () => {
+  beforeEach(() => {
+    localStorage.clear();
+    globalThis.fetch = vi.fn().mockImplementation((url: string, opts?: RequestInit) => {
+      if (url.includes('/api/health')) {
+        return Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve({
+              ok: true,
+              mode: 'demo',
+              ollama_running: false,
+              model: 'gemma3:4b',
+              model_installed: false,
+              message: 'Demo Mode — local sample missions',
+            }),
+        });
+      }
+      if (url.includes('/api/stats')) {
+        return Promise.resolve({
+          ok: true,
+          json: () =>
+            Promise.resolve({
+              total_runs: 0,
+              total_distance_km: 0,
+              total_active_sec: 0,
+              challenges_completed: 0,
+              longest_run_km: 0,
+              current_streak_days: 0,
+              favorite_activity: null,
+              difficulty_progression: [],
+              this_week: { runs: 0, distance_km: 0, active_sec: 0 },
+              personal_bests: {},
+              badges: [
+                {
+                  id: 'first_run',
+                  emoji: '🌱',
+                  name: 'First Run',
+                  description: 'Complete your first mission',
+                  earned: false,
+                },
+              ],
+            }),
